@@ -213,6 +213,13 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .navb button[aria-pressed=true]{color:var(--ink);background:var(--bg)}}
 @media(max-width:600px){.fact{grid-template-columns:minmax(0,1fr);gap:6px}.mw{display:flex;flex-direction:column}.atlas .ttl{position:static;order:-1;max-width:none;padding:18px 16px 14px;background:#04201e}}
 /* ===== Rediseño claro (referencia del equipo en Lovable) ===== */
+.atlas .ttl{position:static;max-width:none;padding:2px 2px 16px;background:var(--bg);color:var(--ink);pointer-events:auto}
+.atlas .ttl h1{font-size:clamp(30px,3.4vw,44px)}.atlas .ttl p{color:var(--mut);max-width:62ch;font-size:clamp(16px,1.3vw,18px)}
+.atlas{background:transparent;box-shadow:none;overflow:visible}@media(min-width:901px){.atlas{top:72px}}.atlas .ttl{order:-1}.atlas .mw{display:flex;flex-direction:column;background:var(--bg)}
+.atlas #map{border-radius:22px 22px 0 0}.atlas .foot{border-radius:0 0 22px 22px;box-shadow:0 10px 30px -18px #1f564166}
+.filebtn{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.filebtn small{color:var(--mut);font-size:14.5px}.filebtn .btn{cursor:pointer;margin:0;font-weight:700}
+.card{position:relative;padding-right:44px}.card::after{content:"";position:absolute;right:16px;top:50%;width:10px;height:10px;border-right:2.5px solid var(--mut);border-top:2.5px solid var(--mut);transform:translateY(-50%) rotate(45deg)}
+.card:hover::after{border-color:var(--forest)}
 body{font-size:17px}
 h1,h2,h3{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.025em}
 .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px max(4vw,16px,calc(50vw - 660px + 4vw));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -277,7 +284,7 @@ details.tech{margin:16px 0 0;border:1.5px solid var(--line);border-radius:16px;p
 details.tech summary{cursor:pointer;font-weight:700;min-height:48px;display:flex;align-items:center}
 details.tech[open]{padding-bottom:14px}
 .fac:first-of-type{border-top:0}
-@media(max-width:600px){.atlas .ttl{background:var(--bg);color:var(--ink);padding:4px 2px 14px}.atlas .ttl p{color:var(--mut)}.atlas{border-radius:18px}.atlas .mw{background:var(--bg)}
+@media(max-width:600px){.foot{font-size:13px;gap:4px 10px;padding:10px 12px}.legend{gap:4px 12px}.atlas .ttl{background:var(--bg);color:var(--ink);padding:4px 2px 14px}.atlas .ttl p{color:var(--mut)}.atlas{border-radius:18px}.atlas .mw{background:var(--bg)}
  .top .net{display:none}.panel{padding:18px 16px}}
 </style>
 </head>
@@ -468,7 +475,7 @@ function drawRail(){const cur=S.step-1;
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
 function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2>${ayuda('ver todos los lugares detectados, ordenados del más urgente al menos urgente. Tocá uno para abrir su ficha.')}<p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}.</p><div class="list">`+
- (S.todas?r:r.slice(0,5)).map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'sin análisis todavía':'con análisis'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'+(r.length>5?`<button type="button" class="ghost mas" id="mas" aria-expanded="${!!S.todas}">${S.todas?'Mostrar solo las 5 más urgentes':`Ver los ${r.length} lugares`}</button>`:'')}
+ (S.todas?r:r.slice(0,5)).map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'sin análisis todavía':'con análisis'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div></article>`}).join('')+'</div>'+(r.length>5?`<button type="button" class="ghost mas" id="mas" aria-expanded="${!!S.todas}">${S.todas?'Mostrar solo las 5 más urgentes':`Ver los ${r.length} lugares`}</button>`:'')}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
  const bar=(t,val,m)=>`<div class="fac"><span class="t">${t}</span><span class="chip c${val||0}">${['Sin dato','Bajo','Medio','Alto'][val||0]}</span><small>${esc(m)}</small></div>`;
@@ -498,7 +505,7 @@ function vReporte(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>
  ${opts?`<form id="pf"><label for="ps">Lugar</label><select id="ps">${opts}</select>
  ${yn('arena','¿Ves montones de tierra o arena lavada cerca del río?')}${yn('color','¿El agua tiene un color distinto al normal?')}${yn('drena','¿El agua de este lugar corre hacia el río?')}${yn('exp','¿La gente pesca o toma agua río abajo?')}
  <label>¿Qué tan urgente te parece?</label><div class="opts">${[['BAJO','Poco'],['MEDIO','Algo'],['ALTO','Mucho']].map(([v,t])=>`<label><input type="radio" name="nivel" value="${v}" ${v==='MEDIO'?'checked':''}>${t}</label>`).join('')}</div>
- <label for="pfoto">Foto (opcional)</label><input id="pfoto" type="file" accept="image/*"><img id="pimg" class="thumb" alt="Foto adjunta" hidden>
+ <label for="pfoto">Foto (opcional)</label><span class="filebtn"><input id="pfoto" type="file" accept="image/*" class="sr"><label for="pfoto" class="btn ghost"><svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>Elegir o sacar foto</label><small id="pfn">Ninguna foto todavía</small></span><img id="pimg" class="thumb" alt="Foto adjunta" hidden>
  <label for="pdesc">¿Qué viste? (opcional)</label><textarea id="pdesc" rows="3" maxlength="500"></textarea>
  <div class="acts"><button type="submit">Guardar reporte</button></div></form>`:'<p class="lead">Ya no quedan lugares por verificar en esta demo.</p>'}<p id="pmsg" class="msg" aria-live="polite">${esc(FLASH.p||'')}</p>${S.reports.length?`<h2 style="font-size:20px;margin-top:22px">Mis reportes</h2>${S.reports.slice().reverse().map(r=>`<div class="row" style="cursor:default"><span class="n" style="font-size:16px">${esc(r.id.slice(3))}</span><span><b>${esc(r.sitio)}</b><small>${esc(r.fecha)}</small></span><span class="tag ${r.enviado?'ok':''}">${r.enviado?'Enviado':'En el teléfono, esperando señal'}</span></div>`).join('')}<p class="lead" style="font-size:14px;margin-top:8px">En esta versión el envío es de demostración: todavía no hay un servidor conectado.</p>`:''}`}
 
@@ -532,7 +539,7 @@ function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,
  <label>¿Qué pedís?</label>${radios('pide',PIDE,'Análisis del agua')}
  <label>¿Cuántas familias usan esa agua o pescan ahí?</label>${radios('fam',['1 a 5','6 a 20','21 a 50','Más de 50','No sé'],'No sé')}
  <label>¿Desde cuándo lo notás?</label>${radios('desde',['Semanas','Meses','Años','No sé'],'No sé')}
- <label for="sfoto">Foto (opcional)</label><input id="sfoto" type="file" accept="image/*"><img id="simg" class="thumb" alt="Foto adjunta" hidden>
+ <label for="sfoto">Foto (opcional)</label><span class="filebtn"><input id="sfoto" type="file" accept="image/*" class="sr"><label for="sfoto" class="btn ghost"><svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20"><path d="M4 8h3l2-3h6l2 3h3v11H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>Elegir o sacar foto</label><small id="sfn">Ninguna foto todavía</small></span><img id="simg" class="thumb" alt="Foto adjunta" hidden>
  <label for="sdesc">Contalo con tus palabras (opcional)</label><textarea id="sdesc" rows="3" maxlength="500"></textarea>
  <p id="serr" style="color:var(--hi);font-weight:700" aria-live="polite"></p>
  <div class="acts"><button type="submit">Enviar solicitud</button></div></form><p id="smsg" class="msg" aria-live="polite">${esc(FLASH.s||'')}</p>
@@ -559,7 +566,7 @@ function bindSolicitud(){const sf=document.getElementById('sf');if(!sf)return;co
  document.getElementById('zin').onclick=()=>zoom(1.6);document.getElementById('zout').onclick=()=>zoom(1/1.6);
  document.getElementById('smun').onchange=e=>{e.target.dataset.t='1'};
 
- document.getElementById('sfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('simg');if(f){im.src=URL.createObjectURL(f);im.hidden=false}};
+ document.getElementById('sfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('simg');if(f){im.src=URL.createObjectURL(f);im.hidden=false;document.getElementById('sfn').textContent='Foto lista: '+f.name}};
  sf.onsubmit=e=>{e.preventDefault();const er=document.getElementById('serr');const preo=[...sf.querySelectorAll('input[name=preo]:checked')].map(i=>i.value);const mun=document.getElementById('smun').value;
   if(PK.lon==null){er.textContent='Falta marcar el lugar en el mapa.';document.getElementById('pick').focus();return}
   if(!mun){er.textContent='Falta elegir el municipio.';document.getElementById('smun').focus();return}
@@ -579,12 +586,12 @@ function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||(s.estado==
   return n===2?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="3">Pasar a revisión</button>`:n===3?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="4">Programar visita o muestreo</button>`:n===4?'<small>Esperando el resultado de laboratorio (abajo).</small>':'<small>Resultado cargado y riesgo recalculado.</small>'};
  return `<h2>Autoridad competente <span class="tag">demo</span></h2>${ayuda('mostrar cómo la autoridad recibe los pedidos, organiza las visitas y carga los análisis de laboratorio.')}<p class="lead">Así lo vería la entidad del Estado que recibe los pedidos de la comunidad y encarga los análisis. Todo en esta sección es simulado.</p>
  <h3 style="margin:18px 0 4px">Pedidos de la comunidad</h3>
- ${sols.length?sols.map(q=>`<div class="box"><b>${esc(q.id)}</b>, ${esc(q.lugar||'punto marcado')} (${esc(q.mun)}). Pide: ${esc(q.pide.toLowerCase())}. Familias: ${esc(q.fam)}.${q.ref?`<br><small>Cómo llegar: ${esc(q.ref)}</small>`:''}<div class="steps">${segui(q)}</div><div class="acts" style="align-items:center">${acc(q)}<button type="button" class="ghost" data-ver="${esc(q.sitio)}">Ver en el mapa</button></div></div>`).join(''):'<div class="box">Todavía no llegó ningún pedido. Probá enviar uno desde PROTEGE, en "Pedir evaluación de mi zona".</div>'}
+ ${sols.length?sols.map(q=>`<div class="box"><b>${esc(q.id)}</b>, ${esc(q.lugar||'punto marcado')} (${esc(q.mun)}). Pide: ${esc(q.pide.toLowerCase())}. Familias: ${esc(q.fam)}.${q.ref?`<br><small>Cómo llegar: ${esc(q.ref)}</small>`:''}<div class="steps">${segui(q)}</div><div class="acts" style="align-items:center">${acc(q)}<button type="button" class="ghost" data-ver="${esc(q.sitio)}">Ver en el mapa</button></div></div>`).join(''):'<div class="box">Todavía no llegó ningún pedido. Probá enviar uno desde Avisar, en "Pedir evaluación de mi zona".</div>'}
  <h3 style="margin:22px 0 4px">Cargar resultado de laboratorio</h3><p class="lead" style="font-size:15px">Cuando llega el análisis de una muestra, se carga acá y el riesgo se recalcula. El resultado es simulado.</p>
  ${pend.length?`<form id="lf"><label for="ls">Lugar con muestra tomada</label><select id="ls">${pend.map(s=>`<option value="${esc(s.id)}">${esc(s.id)}, ${esc(s.mun)}</option>`).join('')}</select>
  <label for="lv">Mercurio en sedimento (mg/kg)</label><input id="lv" type="number" step="0.01" min="0" value="3.2" inputmode="decimal">
  <label for="lm">Método</label><select id="lm"><option>CV-AAS (vapor frío)</option><option>EPA 7473</option></select>
- <p id="lerr" style="color:var(--hi);font-weight:700" aria-live="polite"></p><div class="acts"><button type="submit">Guardar resultado</button></div></form>`:'<div class="box">No hay muestras pendientes. Una poza verificada con PROTEGE, o un pedido con visita programada, aparece acá.</div>'}
+ <p id="lerr" style="color:var(--hi);font-weight:700" aria-live="polite"></p><div class="acts"><button type="submit">Guardar resultado</button></div></form>`:'<div class="box">No hay muestras pendientes. Una poza verificada desde Avisar, o un pedido con visita programada, aparece acá.</div>'}
  <div class="box" style="font-size:15px">Valor de referencia de demostración: ${CFG.refHg} mg/kg en sedimento. El valor real lo define el equipo con una norma o guía oficial.</div>`}
 
 // Cambia de sección y, en pantallas angostas, lleva la vista al contenido (queda debajo del mapa)
@@ -598,7 +605,7 @@ function render(){drawRail();drawMap();
  g('copy',async()=>{const s=site(S.sel),r=idx(s);const t=`MERCU-CERO, ${s.id}, ${s.mun} (${s.lat.toFixed(5)}, ${s.lon.toFixed(5)})\nÍndice: ${fmt(r.p)} (${r.lab})\nSalud ${r.a[0]}: ${r.a[2]}\nComunidad ${r.b[0]}: ${r.b[1]}\nNaturaleza ${r.c[0]}: ${r.c[1]}\nEstado: ${ESTADO[s.estado]}\nFuentes: Sentinel-2 2025, INE-UDAPE NBI 2024, WDPA, WorldPop 2020`;
   const m=document.getElementById('cmsg');try{await navigator.clipboard.writeText(t);m.textContent='Ficha copiada.'}catch(e){m.textContent='No se pudo copiar en este navegador.'}});
  const pf=document.getElementById('pf');if(pf){const ps=document.getElementById('ps');ps.onchange=()=>{S.sel=ps.value;drawMap()};
-  document.getElementById('pfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('pimg');if(f){im.src=URL.createObjectURL(f);im.hidden=false}};
+  document.getElementById('pfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('pimg');if(f){im.src=URL.createObjectURL(f);im.hidden=false;document.getElementById('pfn').textContent='Foto lista: '+f.name}};
   pf.onsubmit=e=>{e.preventDefault();const val=n=>pf.querySelector(`input[name=${n}]:checked`).value;const s=site(ps.value);
    saveReport(s,{exp:val('exp')==='Sí',drena:val('drena')==='Sí',senal:[val('arena')==='Sí'&&'Arena lavada',val('color')==='Sí'&&'Agua de otro color'].filter(Boolean),nivel:val('nivel'),desc:document.getElementById('pdesc').value});
    S.sel=s.id;save();FLASH={p:`Reporte guardado${online()?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`};render()}}
