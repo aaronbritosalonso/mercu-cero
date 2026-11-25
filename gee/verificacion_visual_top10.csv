@@ -1,0 +1,11 @@
+puesto,id,municipio,resultado,observacion,google_maps
+1,S2-09,Tacacoma,probable,"El punto cae en el cauce trenzado del río; en la orilla izquierda hay terreno desmontado compatible con minería. No se ve una poza separada del río.",https://www.google.com/maps/@-15.25526,-68.30444,900m/data=!3m1!1e3
+2,S2-10,Tacacoma,confirmada,"Gran frente minero: terreno excavado, montículos de material lavado y pozas de agua marrón separadas del río.",https://www.google.com/maps/@-15.24307,-68.31485,900m/data=!3m1!1e3
+3,S2-20,Apolo,probable,"Río con agua turbia y desmonte minero en la orilla, con pozas pequeñas de color verde turquesa junto al cauce.",https://www.google.com/maps/@-15.1376,-68.3056,900m/data=!3m1!1e3
+4,S2-12,Tacacoma,dudosa,"Cauce trenzado con barras de grava removidas; no se distingue una poza de relave.",https://www.google.com/maps/@-15.24191,-68.32942,900m/data=!3m1!1e3
+5,S2-34,Apolo,probable,"El punto cae en el río; en la orilla derecha hay un área removida compatible con minería.",https://www.google.com/maps/@-15.23729,-68.13756,900m/data=!3m1!1e3
+6,S2-39,Apolo,falso_positivo,"Río dentro de bosque, sin señales visibles de minería. El algoritmo confundió el cauce con una poza.",https://www.google.com/maps/@-15.16279,-68.18383,900m/data=!3m1!1e3
+7,S2-21,Apolo,confirmada,"Zona minera intensa junto al río Tipuani: pozas rectangulares, orillas dragadas y maquinaria.",https://www.google.com/maps/@-15.22021,-67.6813,900m/data=!3m1!1e3
+8,S2-16,Apolo,dudosa,"Cauce ancho del río con playas de sedimento; solo pozas pequeñas en la orilla.",https://www.google.com/maps/@-15.10224,-67.6773,900m/data=!3m1!1e3
+9,S2-40,Mapiri,confirmada,"Grandes pozas de excavación minera junto al río, con material lavado y campamento.",https://www.google.com/maps/@-15.28906,-68.19711,900m/data=!3m1!1e3
+10,S2-33,Mapiri,confirmada,"Varias pozas mineras grandes separadas del río por terreno removido.",https://www.google.com/maps/@-15.29037,-68.19003,900m/data=!3m1!1e3
