@@ -47,7 +47,7 @@ svg text{font-family:"Atkinson Hyperlegible",sans-serif;paint-order:stroke;strok
 @media(prefers-reduced-motion:no-preference){.scan{display:block;animation:scan 2.4s cubic-bezier(.4,0,.2,1) .3s both}@keyframes scan{from{transform:translateX(0)}92%{opacity:1}to{transform:translateX(var(--w));opacity:0}}
 .pond{animation:pop .4s ease-out both}@keyframes pop{from{opacity:0;transform:scale(.3)}}
 .pulse{animation:p 2.2s ease-out infinite;transform-origin:center;transform-box:fill-box}@keyframes p{from{opacity:.6;transform:scale(1)}to{opacity:0;transform:scale(2.6)}}
-.view{animation:in .3s ease-out}@keyframes in{from{opacity:0;transform:translateY(4px)}}}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}}
 .side{display:flex;flex-direction:column;gap:16px}
 .how{background:var(--card);border-radius:18px;padding:16px 18px;border:1px solid var(--line)}
 .how .head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -203,6 +203,28 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .mform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}.mform input{flex:1}.mform button{min-height:46px}
 @media(max-width:900px){.mbub{right:12px;bottom:146px}.mbub::after{right:18px}.mfab{bottom:84px;right:12px}.mfab span:last-child{display:none}.mfab{padding:0 8px}.mchat{right:8px;left:8px;width:auto;bottom:80px;height:calc(100dvh - 160px)}}
 @media(prefers-reduced-motion:no-preference){.mm{animation:in .2s ease-out}}
+:root{interpolate-size:allow-keywords}
+@media(prefers-reduced-motion:no-preference){
+ html{scroll-behavior:smooth}
+ .enter>*,.enter .list>*{animation:rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*55ms)}
+ @keyframes rise{from{opacity:0;transform:translateY(18px)}}
+ .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+ .card,.sc,.herr li,.secs,.leer,.how{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,border-color .15s,opacity .7s ease}
+ .rv.card,.rv.sc,.rv.herr li{transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease}
+ details.acc::details-content{transition:height .38s cubic-bezier(.2,.8,.2,1),content-visibility .38s allow-discrete;height:0;overflow:clip}
+ details.acc[open]::details-content{height:auto}
+ .navb button,.tabs button,.seg button{transition:background .2s,color .2s}
+ .chip{transition:transform .2s}.card:hover .chip{transform:scale(1.05)}
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .card:hover,.sc:hover,.herr li:hover{transform:translateY(-4px);box-shadow:0 16px 32px -16px #1f564166}
+ button:not(.ghost):not(.mfab):hover{transform:translateY(-1px)}
+ .mfab:hover{transform:scale(1.04)}
+}
+@media(prefers-reduced-motion:reduce){
+ .enter>*,.enter .list>*{animation:fade .4s ease both;animation-delay:calc(var(--i,0)*40ms)}@keyframes fade{from{opacity:0}}
+ .rv{opacity:0;transition:opacity .6s ease}.rv.in{opacity:1}
+}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
@@ -595,10 +617,11 @@ function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||(s.estado==
  <div class="box" style="font-size:15px">Valor de referencia de demostración: ${CFG.refHg} mg/kg en sedimento. El valor real lo define el equipo con una norma o guía oficial.</div>`}
 
 // Cambia de sección y, en pantallas angostas, lleva la vista al contenido (queda debajo del mapa)
-function goView(v){S.view=v;render();if(matchMedia('(max-width:900px)').matches){const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;document.getElementById('view').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}}
+function goView(v){S.view=v;render();const el=document.getElementById('view'),r=el.getBoundingClientRect(),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;if(matchMedia('(max-width:900px)').matches||r.top<70||r.top>innerHeight*.55)el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}
 function render(){drawRail();drawMap();
  const v=document.getElementById('view');v.classList.remove('view');void v.offsetWidth;v.classList.add('view');
  v.innerHTML={ranking:vRanking,ficha:vFicha,protege:vProtege,lab:vLab}[S.view]();
+ if(S.view+'|'+S.sel!==window.__vk){window.__vk=S.view+'|'+S.sel;v.classList.remove('enter');void v.offsetWidth;[...v.children].slice(0,14).forEach((c,i)=>c.style.setProperty('--i',i));v.querySelectorAll('.list>*').forEach((c,i)=>c.style.setProperty('--i',Math.min(i+3,12)));v.classList.add('enter');clearTimeout(window.__vt);window.__vt=setTimeout(()=>v.classList.remove('enter'),1600)}
  v.querySelectorAll('.row[data-id]').forEach(r=>r.onclick=()=>{S.sel=r.dataset.id;goView('ficha')});
  const g=(id,f)=>{const e=document.getElementById(id);if(e)e.onclick=f};
  g('toP',()=>goView('protege'));g('toL',()=>goView('lab'));
@@ -646,6 +669,9 @@ function guiaOpen(){GPREV=document.activeElement;GI=0;let el=document.getElement
  el.hidden=false;document.body.style.overflow='hidden';guiaShow();S.guia=true;save()}
 function guiaClose(){const el=document.getElementById('guia');if(el)el.hidden=true;document.body.style.overflow='';if(GPREV)GPREV.focus()}
 document.getElementById('gopen').onclick=guiaOpen;
+(()=>{const els=[...document.querySelectorAll('.secs,.leer,.how,.why,.herr h2,.herr .lead,.herr li,.herr .disc,.fine')];if(!('IntersectionObserver' in window))return;
+ els.forEach((e,i)=>{e.classList.add('rv');if(e.matches('.herr li'))e.style.transitionDelay=(i%3)*90+'ms'});
+ const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});els.forEach(e=>io.observe(e))})();
 // ===== Mercu: asistente de la app (reglas + datos de la app; no usa internet ni inventa) =====
 const nrm=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9ñ\- ]/g,' ');
 const has=(q,...ws)=>ws.some(w=>q.includes(w));
