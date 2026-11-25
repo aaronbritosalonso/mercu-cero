@@ -447,7 +447,6 @@ function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,
  <form id="sf" novalidate>
  <label id="l-pick">¿Dónde está el problema?</label>
  <div class="pick"><svg id="pick" tabindex="0" aria-labelledby="l-pick" aria-describedby="pinfo"></svg><div class="zb"><button type="button" id="zin" aria-label="Acercar el mapa">+</button><button type="button" id="zout" aria-label="Alejar el mapa">−</button></div><span class="zl" id="zl"></span></div>
- <div class="acts" style="margin-top:8px"><button type="button" class="ghost" id="geo">Usar mi ubicación</button></div>
  <p id="pinfo" class="lead" style="font-size:15px;margin-top:8px" aria-live="polite"></p>
  <label for="smun">Municipio</label><select id="smun"><option value="">Elegí el municipio</option>${muns.map(m=>`<option>${esc(m)}</option>`).join('')}</select>
  <label for="slug">Nombre del lugar (opcional)</label><input id="slug" type="text" maxlength="80" placeholder="Comunidad, quebrada o río">
@@ -471,7 +470,7 @@ function drawPick(){const m=document.getElementById('pick');if(!m)return;const[x
  m.setAttribute('aria-label',PK.lon==null?'Mapa para marcar el lugar. Tocá para poner el punto; con las flechas del teclado lo movés.':`Punto marcado en ${PK.lat.toFixed(4)}, ${PK.lon.toFixed(4)}.`);
  document.getElementById('zl').textContent=PK.z>1?`Acercado ×${PK.z.toFixed(1).replace('.',',').replace(',0','')}`:'Vista completa';
  const inf=document.getElementById('pinfo');
- if(PK.lon==null){inf.textContent='Tocá el mapa donde está el río o el lugar que te preocupa. Después podés acercar con + y tocar de nuevo para ajustar el punto.';return}
+ if(PK.lon==null){inf.textContent='Tocá el mapa donde está el río o el lugar que te preocupa. Usá los pueblos como guía, acercá con + y tocá de nuevo para ajustar el punto. No hace falta estar en el lugar ni tener internet.';return}
  const L=lugar(PK.lon,PK.lat);
  inf.innerHTML=`<b>Punto marcado:</b> ${PK.lat.toFixed(4)}, ${PK.lon.toFixed(4)}. Río grande más cercano a unos ${L.rio.toLocaleString('es-BO')} m (las quebradas chicas no aparecen: si hay una cerca, marcalo abajo); poza detectada más cercana: ${esc(L.near.id)}, a ${L.nearKm.toFixed(1).replace('.',',')} km (distancias aproximadas). <a href="https://www.google.com/maps/@${PK.lat},${PK.lon},700m/data=!3m1!1e3" target="_blank" rel="noopener">Ver el punto en Google Maps</a>`;
  const sm=document.getElementById('smun');if(sm&&sm.dataset.t!=='1'&&NBI[L.near.mun]!=null)sm.value=L.near.mun}
@@ -482,10 +481,7 @@ function bindSolicitud(){const sf=document.getElementById('sf');if(!sf)return;co
  const zoom=f=>{PK.z=Math.max(1,Math.min(4,PK.z*f));if(PK.z<1.05)PK.z=1;if(PK.lon==null&&PK.z>1&&!PK.cx){PK.cx=MW/2;PK.cy=MH/2}drawPick()};
  document.getElementById('zin').onclick=()=>zoom(1.6);document.getElementById('zout').onclick=()=>zoom(1/1.6);
  document.getElementById('smun').onchange=e=>{e.target.dataset.t='1'};
- document.getElementById('geo').onclick=()=>{const inf=document.getElementById('pinfo');if(!navigator.geolocation){inf.textContent='Este teléfono no permite obtener la ubicación. Marcá el punto en el mapa.';return}
-  inf.textContent='Buscando tu ubicación…';
-  navigator.geolocation.getCurrentPosition(g=>{const{latitude:la,longitude:lo}=g.coords;if(lo<B.w||lo>B.e||la<B.s||la>B.n){inf.textContent='Tu ubicación está fuera de la zona piloto (Guanay, Tipuani, Mapiri y Teoponte). Marcá el punto a mano en el mapa.';return}setPin(lo,la,3)},
-   ()=>{inf.textContent='No se pudo obtener tu ubicación. Revisá que el GPS esté prendido o marcá el punto en el mapa.'},{enableHighAccuracy:true,timeout:12000})};
+
  document.getElementById('sfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('simg');if(f){im.src=URL.createObjectURL(f);im.hidden=false}};
  sf.onsubmit=e=>{e.preventDefault();const er=document.getElementById('serr');const preo=[...sf.querySelectorAll('input[name=preo]:checked')].map(i=>i.value);const mun=document.getElementById('smun').value;
   if(PK.lon==null){er.textContent='Falta marcar el lugar en el mapa.';document.getElementById('pick').focus();return}
