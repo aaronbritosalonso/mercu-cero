@@ -158,6 +158,17 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .ayuda{display:flex;gap:10px;align-items:flex-start;background:var(--sage);border-radius:14px;padding:10px 14px;margin:8px 0 14px;font-size:15px;line-height:1.45}
 .ayuda svg{flex:none;width:20px;height:20px;color:var(--forest);margin-top:1px}
 @media(max-width:420px){.sgrid{grid-template-columns:1fr}}
+.acc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;min-height:48px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary b{display:block;font-family:Manrope;font-size:18px;letter-spacing:-.01em}.acc summary small{display:block;color:var(--mut);font-size:14.5px;margin-top:1px}
+.acc .chev{flex:none;width:34px;height:34px;padding:7px;border-radius:50%;background:var(--sage);color:var(--forest);transition:transform .2s}
+.acc[open] .chev{transform:rotate(180deg)}
+.acc[open]>summary{margin-bottom:10px}
+.acc.in{margin:18px 0 0;border:1.5px solid var(--line);border-radius:16px;padding:6px 14px}.acc.in[open]{padding-bottom:14px}
+.why .acc.big summary b{font-size:clamp(22px,2.6vw,28px)}
+.fine .acc{padding:4px 0}.fine .acc summary b{font-size:16px}
+.mas{width:100%;justify-content:center;margin-top:12px}
+@media(prefers-reduced-motion:reduce){.acc .chev{transition:none}}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
@@ -248,11 +259,11 @@ details.tech[open]{padding-bottom:14px}
   </figure>
   <div class="side">
    <section class="secs" aria-labelledby="secst"><h2 id="secst">¿Qué podés hacer acá?</h2><div class="sgrid" id="sgrid"></div></section>
-   <section class="leer" aria-labelledby="leert"><h2 id="leert">Cómo leer el nivel de riesgo</h2><ul>
+   <details class="leer acc"><summary><span><b>Cómo leer el nivel de riesgo</b><small>Bajo, medio y alto: qué significa cada uno</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><ul>
     <li><i style="background:#3f9a73"></i><b>Bajo</b><span>Seguimiento con satélite</span></li>
     <li><i style="background:#e0a21a"></i><b>Medio</b><span>Evaluar una visita</span></li>
     <li><i style="background:#c62a1e"></i><b>Alto</b><span>Inspección prioritaria</span></li></ul>
-    <p class="disc">El nivel de riesgo indica <b>prioridad de investigación</b>. No confirma que haya mercurio: eso solo lo dice un análisis de laboratorio.</p></section>
+    <p class="disc">El nivel de riesgo indica <b>prioridad de investigación</b>. No confirma que haya mercurio: eso solo lo dice un análisis de laboratorio.</p></details>
    <section class="how" aria-label="Cómo funciona">
     <div class="head"><div><h2 id="howt">Recorrido guiado con un caso real</h2><p class="now" id="hown">Seis pasos para ver cómo funciona todo: del satélite a la decisión.</p></div><button id="go">Empezar</button></div>
     <div class="bars" id="rail" aria-hidden="true"></div>
@@ -264,13 +275,12 @@ details.tech[open]{padding-bottom:14px}
   </div>
  </div>
 </div>
-<section class="why" aria-label="Por qué importa">
- <h2>Por qué importa</h2>
+<section class="why" aria-label="Por qué importa"><details class="acc big"><summary><span><b>Por qué importa</b><small>El mercurio, la minería de oro y los ríos del Beni en tres datos</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
  <div class="fact"><div class="num">70 %</div><div><p>del mercurio que Bolivia libera cada año proviene de la minería de oro, según un estudio del gobierno citado por la prensa.</p><a href="https://es.mongabay.com/2017/11/bolivia-indigenas-campesinos-expuestos-al-mercurio-consumo-peces-la-amazonia/">Mongabay Latam, 2017</a></div></div>
  <div class="fact"><div class="num">+160</div><div><p>comunidades de la cuenca del río Beni están amenazadas por el mercurio, que les llega a través del pescado que consumen.</p><a href="https://news.mongabay.com/2026/09/mercury-threatens-over-160-communities-in-bolivias-beni-river-basin/">Mongabay, 2026</a></div></div>
  <div class="fact"><div class="num">1 paso</div><div><p>confirma el mercurio: el análisis de laboratorio. El satélite solo indica dónde buscar primero, y así se gastan menos muestras.</p><a href="https://www.cepal.org/es/publicaciones/80793-guia-priorizar-evaluar-proyectos-remediacion-ambiental-gestion-pasivos-mineros">Metodología del índice: CEPAL, 2024</a></div></div>
-</section>
-<div class="fine"><p>Datos reales: imagen y pozas de Sentinel-2 (mayo a septiembre de 2025) con JRC Global Surface Water; área protegida (WDPA); municipios (geoBoundaries); NBI del Censo 2024 (INE y UDAPE); población en 5 km (WorldPop 2020); revisión de las 10 primeras pozas con imágenes de Google Maps; agua en radar con Sentinel-1 (temporada seca 2025) y pérdida de vegetación con Sentinel-2 (2019 frente a 2025), ambos calculados en Google Earth Engine; zonas mineras de <a href="https://www.earthgenome.org/work/amazon-mining-watch">Amazon Mining Watch</a> (Earth Genome, licencia CC BY 4.0, datos de octubre de 2026). Simulado: reportes PROTEGE y resultados de laboratorio. El valor de referencia de mercurio (1 mg/kg) es de demostración hasta que lo defina el equipo.</p></div>
+</details></section>
+<div class="fine"><details class="acc"><summary><span><b>Datos y fuentes</b><small>De dónde sale cada dato y qué es simulado</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Datos reales: imagen y pozas de Sentinel-2 (mayo a septiembre de 2025) con JRC Global Surface Water; área protegida (WDPA); municipios (geoBoundaries); NBI del Censo 2024 (INE y UDAPE); población en 5 km (WorldPop 2020); revisión de las 10 primeras pozas con imágenes de Google Maps; agua en radar con Sentinel-1 (temporada seca 2025) y pérdida de vegetación con Sentinel-2 (2019 frente a 2025), ambos calculados en Google Earth Engine; zonas mineras de <a href="https://www.earthgenome.org/work/amazon-mining-watch">Amazon Mining Watch</a> (Earth Genome, licencia CC BY 4.0, datos de octubre de 2026). Simulado: reportes PROTEGE y resultados de laboratorio. El valor de referencia de mercurio (1 mg/kg) es de demostración hasta que lo defina el equipo.</p></details></div>
 <nav class="navb" id="navb" aria-label="Secciones"></nav>
 <script>
 {
@@ -359,12 +369,12 @@ const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
 function evidencias(s){const e=EVID[s.id],a=e?{desde:e[0],cerca:amwEn(s.lon,s.lat).cerca}:amwEn(s.lon,s.lat);
  const it=(ok,t,d)=>`<div><span class="si ${ok?'':'no'}" aria-label="${ok?'Coincide':'No coincide'}">${ok?'✓':'–'}</span><b>${t}</b><small>${d}</small></div>`;
  const amwT=a.desde?`Marca minería en este lugar desde ${a.desde}, detectada con inteligencia artificial sobre imágenes satelitales.`:a.cerca?`No marca minería en el punto exacto, pero hay ${a.cerca} detecciones a menos de 1 km.`:'No marca minería a menos de 1 km.';
- if(!e)return `<h3 class="porq">Lo que dicen las fuentes satelitales</h3><div class="ev">${it(!!a.desde,'Amazon Mining Watch',amwT)}<p class="lead" style="font-size:14.5px;margin:4px 0 0">Para un punto marcado por la comunidad todavía no hay análisis de Sentinel-1 ni de Sentinel-2: se hacen al revisar el pedido.</p></div>`;
+ if(!e)return `<details class="acc in"><summary><span><b>Lo que dicen las fuentes satelitales</b><small>Para este punto, solo Amazon Mining Watch</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="ev">${it(!!a.desde,'Amazon Mining Watch',amwT)}<p class="lead" style="font-size:14.5px;margin:4px 0 0">Para un punto marcado por la comunidad todavía no hay análisis de Sentinel-1 ni de Sentinel-2: se hacen al revisar el pedido.</p></div></details>`;
  const k=1+(e[1]>=.5)+(!!e[0]);
- return `<h3 class="porq">Lo que dicen las fuentes satelitales <span class="chip c0" style="vertical-align:3px;margin-left:4px">Coinciden ${k} de 3</span></h3><div class="ev">
+ return `<details class="acc in"><summary><span><b>Lo que dicen las fuentes satelitales</b><small>Coinciden ${k} de 3: Sentinel-2, Sentinel-1 y Amazon Mining Watch</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="ev">
  ${it(true,'Sentinel-2 (imagen óptica)',`Detectó agua y suelo removido junto al río en 2025. ${e[2]?'Hasta 2019 acá había vegetación densa: la poza es reciente.':'No hubo un cambio fuerte de vegetación en el punto entre 2019 y 2025.'} En 500 m a la redonda se perdieron ${String(e[3].toFixed(1)).replace('.',',')} ha de vegetación densa desde 2019.`)}
  ${it(e[1]>=.5,'Sentinel-1 (radar)',e[1]>=.5?'El radar ve agua quieta en el lugar, aunque haya nubes. Ojo: también detecta el agua del río.':'El radar no ve agua quieta en el punto exacto.')}
- ${it(!!e[0],'Amazon Mining Watch',amwT)}</div>`}
+ ${it(!!e[0],'Amazon Mining Watch',amwT)}</div></details>`}
 function accion(s,r){if(!r.pre)return typeof s.hg==='number'&&s.hg>CFG.refHg?[3,'El análisis supera la referencia: coordinar la remediación y avisar a la comunidad.']:[1,'El análisis está bajo la referencia: mantener el seguimiento con satélite.'];
  return r.n===3?[3,'Inspección prioritaria: programar visita de campo y toma de muestras para análisis de mercurio.']:r.n===2?[2,s.estado==='candidato'?'Evaluar una visita: confirmar en el lugar con PROTEGE y, si se confirma, tomar muestras.':'Evaluar una visita y tomar muestras para análisis de mercurio.']:[1,'Seguimiento con satélite: revisar la zona con imágenes nuevas cada temporada seca.']}
 const rioTxt=s=>s.distRio<=60?'pegada al río':s.distRio<1000?`a ${s.distRio} m del río`:`a ${(s.distRio/1000).toFixed(1).replace('.',',')} km del río`;
@@ -407,8 +417,8 @@ function drawRail(){const cur=S.step-1;
 
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
-function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2>${ayuda('ver todos los lugares detectados, ordenados del más urgente al menos urgente. Tocá uno para abrir su ficha.')}<p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}, de mayor a menor riesgo. Tocá uno para ver por qué.</p><div class="list">`+
- r.map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'preliminar':'con laboratorio'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'}
+function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2>${ayuda('ver todos los lugares detectados, ordenados del más urgente al menos urgente. Tocá uno para abrir su ficha.')}<p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}.</p><div class="list">`+
+ (S.todas?r:r.slice(0,5)).map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'preliminar':'con laboratorio'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'+(r.length>5?`<button type="button" class="ghost mas" id="mas" aria-expanded="${!!S.todas}">${S.todas?'Mostrar solo las 5 más urgentes':`Ver los ${r.length} lugares`}</button>`:'')}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
  const bar=(t,val,m)=>`<div class="fac"><span class="t">${t}</span><span class="chip c${val||0}">${['Sin dato','Bajo','Medio','Alto'][val||0]}</span><small>${esc(m)}</small></div>`;
@@ -544,6 +554,7 @@ function render(){drawRail();drawMap();
    S.sel=s.id;save();FLASH={p:`Reporte guardado${online()?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`};render()}}
  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{S.pmode=b.dataset.m;FLASH={};render()});
  bindSolicitud();
+ const mas=document.getElementById('mas');if(mas)mas.onclick=()=>{S.todas=!S.todas;render();if(!S.todas)document.getElementById('view').scrollIntoView({block:'start'})};
  const at=document.getElementById('amwt');if(at){at.checked=!!S.amw;at.onchange=()=>{S.amw=at.checked;save();drawMap()}}
  const ns=document.getElementById('nosig');if(ns)ns.onchange=()=>{S.sinSenal=ns.checked;save();net();if(!S.sinSenal)sync()};
  document.querySelectorAll('[data-sol]').forEach(b=>b.onclick=()=>{const q=S.solicitudes.find(x=>x.id===b.dataset.sol);q.paso=+b.dataset.p;save();render()});
@@ -578,6 +589,7 @@ function guiaOpen(){GPREV=document.activeElement;GI=0;let el=document.getElement
  el.hidden=false;document.body.style.overflow='hidden';guiaShow();S.guia=true;save()}
 function guiaClose(){const el=document.getElementById('guia');if(el)el.hidden=true;document.body.style.overflow='';if(GPREV)GPREV.focus()}
 document.getElementById('gopen').onclick=guiaOpen;
+document.addEventListener('toggle',e=>{const d=e.target;if(d.tagName==='DETAILS'&&d.open&&d.classList.contains('acc')){const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>d.scrollIntoView({behavior:rm?'auto':'smooth',block:'nearest'}),60)}},true);
 const net=()=>{const n=document.getElementById('net');n.textContent=online()?'Conectado':S.sinSenal?'Sin señal (simulado): se guarda en el teléfono':'Sin señal: se guarda en el teléfono';n.classList.toggle('off',!online())};
 addEventListener('online',()=>{net();sync()});addEventListener('offline',net);net();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
