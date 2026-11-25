@@ -143,8 +143,8 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .ga-tap{animation:gat 2.6s ease-in-out infinite}@keyframes gat{0%,15%{transform:translate(70px,50px)}55%,100%{transform:translate(0,0)}}
 .ga-pop{transform-box:fill-box;transform-origin:bottom left;animation:gpo 2.6s ease-in-out infinite}@keyframes gpo{0%,55%{transform:scale(0);opacity:0}70%,100%{transform:scale(1);opacity:1}}
 .ga-drop{animation:gdr 2.4s cubic-bezier(.3,1.5,.6,1) infinite}@keyframes gdr{0%{transform:translateY(-60px);opacity:0}35%,100%{transform:translateY(0);opacity:1}}
-.ga-off{animation:gof 4s steps(1) infinite}@keyframes gof{0%{opacity:1}50%{opacity:0}}
-.ga-on{animation:gon 4s steps(1) infinite}@keyframes gon{0%{opacity:0}50%{opacity:1}}
+.ga-off{animation:gof 4s linear infinite}@keyframes gof{0%,48%{opacity:1}52%,100%{opacity:0}}
+.ga-on{opacity:0;animation:gon 4s linear infinite}@keyframes gon{0%,48%{opacity:0}52%,100%{opacity:1}}
 .ga-fly{animation:gfl 4s ease-in-out infinite}@keyframes gfl{0%,50%{transform:translate(0,0);opacity:1}80%{transform:translate(120px,-30px);opacity:0}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.guide *{animation:none!important}}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
