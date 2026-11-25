@@ -169,6 +169,10 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .fine .acc{padding:4px 0}.fine .acc summary b{font-size:16px}
 .mas{width:100%;justify-content:center;margin-top:12px}
 @media(prefers-reduced-motion:reduce){.acc .chev{transition:none}}
+.herr{max-width:1320px;margin:28px auto 0;padding:0 max(4vw,16px)}.herr h2{font-size:clamp(22px,2.6vw,28px);margin-bottom:6px}
+.herr ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.herr li{background:var(--card);border-radius:18px;padding:16px 18px;box-shadow:0 1px 2px #13302a0d,0 10px 30px -18px #1f56413d}
+.herr li b{display:block;font-family:Manrope;font-size:18px;margin-bottom:4px;color:var(--forest)}.herr li span{color:var(--ink);font-size:15.5px;line-height:1.5}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
@@ -253,8 +257,8 @@ details.tech[open]{padding-bottom:14px}
  <div class="layout">
   <figure class="atlas" style="margin:0">
    <div class="mw"><svg id="map" role="img" aria-label="Imagen satelital de la cuenca alta del río Beni con las pozas detectadas"></svg>
-   <div class="ttl"><h1>Dónde investigar primero</h1><p>Imágenes satelitales, datos del territorio y la voz de la comunidad para encontrar relaves mineros que pueden llevar mercurio a los ríos del norte de La Paz. Para comunidades, estudiantes y autoridades.</p></div></div>
-   <figcaption class="foot"><span>Imagen Sentinel-2 de may a sep de 2025 (Copernicus)</span>
+   <div class="ttl"><h1>Dónde investigar primero</h1><p>Imágenes satelitales, datos del territorio y la voz de la comunidad para encontrar relaves mineros (el barro y el agua que sobran al lavar el oro) que pueden llevar mercurio a los ríos del norte de La Paz. Para comunidades, estudiantes y autoridades.</p></div></div>
+   <figcaption class="foot"><span>Foto satelital Sentinel-2, de mayo a septiembre de 2025</span>
     <span class="legend"><span class="grad">Menos riesgo <b></b> Más riesgo</span><span><i class="ring"></i>Confirmada en imagen</span><span>Tamaño = área</span><span>◆ Pedido de la comunidad</span><label class="amwsw"><input type="checkbox" id="amwt"> <i></i>Minería detectada por Amazon Mining Watch</label></span></figcaption>
   </figure>
   <div class="side">
@@ -280,6 +284,15 @@ details.tech[open]{padding-bottom:14px}
  <div class="fact"><div class="num">+160</div><div><p>comunidades de la cuenca del río Beni están amenazadas por el mercurio, que les llega a través del pescado que consumen.</p><a href="https://news.mongabay.com/2026/09/mercury-threatens-over-160-communities-in-bolivias-beni-river-basin/">Mongabay, 2026</a></div></div>
  <div class="fact"><div class="num">1 paso</div><div><p>confirma el mercurio: el análisis de laboratorio. El satélite solo indica dónde buscar primero, y así se gastan menos muestras.</p><a href="https://www.cepal.org/es/publicaciones/80793-guia-priorizar-evaluar-proyectos-remediacion-ambiental-gestion-pasivos-mineros">Metodología del índice: CEPAL, 2024</a></div></div>
 </details></section>
+<section class="herr" aria-labelledby="herrt"><h2 id="herrt">Con qué datos trabaja MERCU-CERO</h2>
+ <p class="lead">Tres fuentes satelitales, gratuitas y públicas, ya están dentro del sistema y se ven en la ficha de cada lugar:</p>
+ <ul>
+  <li><b>Sentinel-2</b><span>Fotos tomadas desde el espacio por la Agencia Espacial Europea. Con ellas encontramos las 40 posibles pozas (agua y tierra removida junto a los ríos) y vemos dónde desapareció el monte entre 2019 y 2025.</span></li>
+  <li><b>Sentinel-1</b><span>Radar de la Agencia Espacial Europea que ve el terreno aunque haya nubes, algo muy común en los Yungas. Lo usamos para ver si hay agua quieta en cada poza.</span></li>
+  <li><b>Amazon Mining Watch</b><span>Mapa de la minería en la Amazonía, hecho con inteligencia artificial por Earth Genome. Lo usamos para comparar: 27 de nuestras 40 pozas están en zonas que este mapa ya marcaba como mineras.</span></li>
+ </ul>
+ <p class="disc">Sentinel-1 y Sentinel-2 se procesaron en Google Earth Engine en noviembre de 2026; los datos de Amazon Mining Watch son de octubre de 2026 (licencia CC BY 4.0).</p>
+</section>
 <div class="fine"><details class="acc"><summary><span><b>Datos y fuentes</b><small>De dónde sale cada dato y qué es simulado</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Datos reales: imagen y pozas de Sentinel-2 (mayo a septiembre de 2025) con JRC Global Surface Water; área protegida (WDPA); municipios (geoBoundaries); NBI del Censo 2024 (INE y UDAPE); población en 5 km (WorldPop 2020); revisión de las 10 primeras pozas con imágenes de Google Maps; agua en radar con Sentinel-1 (temporada seca 2025) y pérdida de vegetación con Sentinel-2 (2019 frente a 2025), ambos calculados en Google Earth Engine; zonas mineras de <a href="https://www.earthgenome.org/work/amazon-mining-watch">Amazon Mining Watch</a> (Earth Genome, licencia CC BY 4.0, datos de octubre de 2026). Simulado: reportes PROTEGE y resultados de laboratorio. El valor de referencia de mercurio (1 mg/kg) es de demostración hasta que lo defina el equipo.</p></details></div>
 <nav class="navb" id="navb" aria-label="Secciones"></nav>
 <script>
@@ -325,12 +338,12 @@ const fresh=()=>({sites:BASE.map(s=>({estado:'candidato',...s,sospecha:true})),s
 let S=load()||fresh();S.solicitudes=S.solicitudes||[];
 
 function vsh(s){const exp=s.exp===true;
- if(typeof s.hg==='number'){if(s.hg>CFG.refHg)return exp?[3,false,'Laboratorio supera la referencia y hay vía de exposición']:[2,false,'Laboratorio supera la referencia, sin vía de exposición documentada'];return[1,false,'Laboratorio por debajo de la referencia']}
+ if(typeof s.hg==='number'){if(s.hg>CFG.refHg)return exp?[3,false,'El análisis de laboratorio supera el límite y la gente usa esa agua o come ese pescado']:[2,false,'El análisis supera el límite, pero no se sabe si alguien usa esa agua'];return[1,false,'El análisis de laboratorio está por debajo del límite']}
  const con=s.distRio<=CFG.rioM||s.drena===true||exp;
- const o=s.comunidad?'Pedido de la comunidad':'Sospecha minera';
- return s.sospecha&&con?[2,true,s.distRio<=CFG.rioM?`${o} a unos ${s.distRio} m del río`:exp?`${o}; la gente usa esa agua o pesca ahí`:`${o}; el drenaje corre hacia el río`]:[1,true,'Sin vía de exposición documentada']}
-function vs(s){const n=s.nbi;if(n==null)return[null,'Municipio sin dato de NBI'];return[n>60?3:n>=40?2:1,`En ${s.mun}, ${String(Math.round(n))} de cada 100 hogares tienen necesidades básicas sin cubrir (NBI ${String(n).replace('.',',')} %)`]}
-function ve(s){return s.apKm===0?[3,`Dentro de ${s.ap||'un área protegida'}`]:s.apKm<=CFG.apKm?[2,`A ${Math.round(s.apKm*1000)} m de ${s.ap||'un área protegida'}`]:[1,`A ${String(s.apKm.toFixed(1)).replace('.',',')} km del área protegida más cercana`]}
+ const o=s.comunidad?'Pedido de la comunidad':'Posible relave minero';
+ return s.sospecha&&con?[2,true,s.distRio<=CFG.rioM?`${o} a unos ${s.distRio} m del río`:exp?`${o}; la gente usa esa agua o pesca ahí`:`${o}; el agua que escurre llega al río`]:[1,true,'No se sabe si el agua llega a donde vive o pesca la gente']}
+function vs(s){const n=s.nbi;if(n==null)return[null,'Municipio sin dato de NBI'];return[n>60?3:n>=40?2:1,`En ${s.mun}, ${String(Math.round(n))} de cada 100 hogares no tienen cubiertas sus necesidades básicas, como agua, vivienda o salud`]}
+function ve(s){return s.apKm===0?[3,`Dentro del área protegida ${s.ap||''}`.trim()]:s.apKm<=CFG.apKm?[2,`A ${Math.round(s.apKm*1000)} m del área protegida ${s.ap||''}`.trim()]:[1,`A ${String(s.apKm.toFixed(1)).replace('.',',')} km del área protegida más cercana`]}
 function idx(s){const a=vsh(s),b=vs(s),c=ve(s);if(b[0]==null)return{p:-1,n:0,pre:true,a,b,c,lab:'Sin datos suficientes'};const p=Math.round((CFG.alfa*a[0]+CFG.beta*b[0]+(1-CFG.alfa-CFG.beta)*c[0])*100)/100;const n=Math.min(3,Math.floor(p+.5));return{p,n,pre:a[1],a,b,c,lab:['','Bajo','Medio','Alto'][n]+(a[1]?' (preliminar)':'')}}
 const rank=()=>S.sites.map(s=>({s,r:idx(s)})).sort((x,y)=>((VIS[x.s.id]||[])[0]==='falso')-((VIS[y.s.id]||[])[0]==='falso')||y.r.p-x.r.p||y.s.pob-x.s.pob||x.s.id.localeCompare(y.s.id));
 const site=id=>S.sites.find(s=>s.id===id);
@@ -357,7 +370,7 @@ const SECS={ranking:['Ver dónde actuar primero','La lista de lugares detectados
 const ayuda=t=>`<p class="ayuda"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span><b>Para qué sirve:</b> ${t}</span></p>`;
 const titulo=s=>s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`;
 function tagsDe(s){const v=VIS[s.id],t=[];if(v&&v[0]!=='falso')t.push(`<span class="${v[0]==='confirmada'?'ok':''}">${VISL[v[0]]}</span>`);if(s.comunidad)t.push('<span>Pedido de la comunidad</span>');const e=EVID[s.id];
- if(e){if(e[0])t.push(`<span class="ok">Minería AMW desde ${e[0]}</span>`);if(e[2])t.push('<span>Nueva desde 2019</span>');if(e[1]>=.5)t.push('<span>Radar: agua</span>')}
+ if(e){if(e[0])t.push(`<span class="ok">Minería vista desde ${e[0]}</span>`);if(e[2])t.push('<span>Apareció después de 2019</span>');if(e[1]>=.5)t.push('<span>El radar ve agua</span>')}
  t.push(`<span>${s.comunidad?'A '+(s.distRio/1000).toFixed(1).replace('.',',')+' km del río':rioTxt(s).replace(/^./,c=>c.toUpperCase())}</span>`);if(s.pob)t.push(`<span>${s.pob.toLocaleString('es-BO')} personas a 5 km</span>`);
  if(s.apKm===0)t.push('<span>Dentro de área protegida</span>');else if(s.apKm<=CFG.apKm)t.push('<span>Junto a área protegida</span>');return t.join('')}
 const ICO={rio:'<path d="M3 15c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 9c3 0 3-2 6-2s3 2 6 2 3-2 6-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
@@ -368,13 +381,13 @@ const ICO={rio:'<path d="M3 15c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 9c3 0 3-2 6-2s3 2 6
 const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
 function evidencias(s){const e=EVID[s.id],a=e?{desde:e[0],cerca:amwEn(s.lon,s.lat).cerca}:amwEn(s.lon,s.lat);
  const it=(ok,t,d)=>`<div><span class="si ${ok?'':'no'}" aria-label="${ok?'Coincide':'No coincide'}">${ok?'✓':'–'}</span><b>${t}</b><small>${d}</small></div>`;
- const amwT=a.desde?`Marca minería en este lugar desde ${a.desde}, detectada con inteligencia artificial sobre imágenes satelitales.`:a.cerca?`No marca minería en el punto exacto, pero hay ${a.cerca} detecciones a menos de 1 km.`:'No marca minería a menos de 1 km.';
- if(!e)return `<details class="acc in"><summary><span><b>Lo que dicen las fuentes satelitales</b><small>Para este punto, solo Amazon Mining Watch</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="ev">${it(!!a.desde,'Amazon Mining Watch',amwT)}<p class="lead" style="font-size:14.5px;margin:4px 0 0">Para un punto marcado por la comunidad todavía no hay análisis de Sentinel-1 ni de Sentinel-2: se hacen al revisar el pedido.</p></div></details>`;
+ const amwT=a.desde?`Este mapa, hecho por una organización independiente, ya marcaba minería acá desde ${a.desde}.`:a.cerca?`No marca minería en el punto exacto, pero sí en ${a.cerca} lugares a menos de 1 km.`:'No marca minería a menos de 1 km.';
+ if(!e)return `<details class="acc in"><summary><span><b>Lo que dicen las fuentes satelitales</b><small>Para este punto, solo Amazon Mining Watch</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="ev">${it(!!a.desde,'Amazon Mining Watch: mapa de minería de la Amazonía',amwT)}<p class="lead" style="font-size:14.5px;margin:4px 0 0">Para un punto marcado por la comunidad todavía no hay análisis de Sentinel-1 ni de Sentinel-2: se hacen al revisar el pedido.</p></div></details>`;
  const k=1+(e[1]>=.5)+(!!e[0]);
  return `<details class="acc in"><summary><span><b>Lo que dicen las fuentes satelitales</b><small>Coinciden ${k} de 3: Sentinel-2, Sentinel-1 y Amazon Mining Watch</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="ev">
- ${it(true,'Sentinel-2 (imagen óptica)',`Detectó agua y suelo removido junto al río en 2025. ${e[2]?'Hasta 2019 acá había vegetación densa: la poza es reciente.':'No hubo un cambio fuerte de vegetación en el punto entre 2019 y 2025.'} En 500 m a la redonda se perdieron ${String(e[3].toFixed(1)).replace('.',',')} ha de vegetación densa desde 2019.`)}
- ${it(e[1]>=.5,'Sentinel-1 (radar)',e[1]>=.5?'El radar ve agua quieta en el lugar, aunque haya nubes. Ojo: también detecta el agua del río.':'El radar no ve agua quieta en el punto exacto.')}
- ${it(!!e[0],'Amazon Mining Watch',amwT)}</div></details>`}
+ ${it(true,'Sentinel-2: fotos desde el espacio',`Las fotos de 2025 muestran agua y tierra removida junto al río. ${e[2]?'En 2019 acá había monte: la poza es nueva.':e[4]-e[5]>=.3?'Desde 2019 el monte en este punto se redujo bastante.':e[4]<.4?'Ya en 2019 no había monte en este punto: la zona se trabaja desde antes.':'Comparando con 2019, en este punto el monte no cambió mucho.'} A menos de 500 m se perdieron ${String(e[3].toFixed(1)).replace('.',',')} hectáreas de monte desde 2019 (una hectárea es un poco más que una cancha de fútbol).`)}
+ ${it(e[1]>=.5,'Sentinel-1: radar que ve a través de las nubes',e[1]>=.5?'El radar ve agua quieta en este lugar. Ojo: también ve el agua del río, por eso solo sirve de apoyo.':'El radar no ve agua quieta en el punto exacto.')}
+ ${it(!!e[0],'Amazon Mining Watch: mapa de minería de la Amazonía',amwT)}</div></details>`}
 function accion(s,r){if(!r.pre)return typeof s.hg==='number'&&s.hg>CFG.refHg?[3,'El análisis supera la referencia: coordinar la remediación y avisar a la comunidad.']:[1,'El análisis está bajo la referencia: mantener el seguimiento con satélite.'];
  return r.n===3?[3,'Inspección prioritaria: programar visita de campo y toma de muestras para análisis de mercurio.']:r.n===2?[2,s.estado==='candidato'?'Evaluar una visita: confirmar en el lugar con PROTEGE y, si se confirma, tomar muestras.':'Evaluar una visita y tomar muestras para análisis de mercurio.']:[1,'Seguimiento con satélite: revisar la zona con imágenes nuevas cada temporada seca.']}
 const rioTxt=s=>s.distRio<=60?'pegada al río':s.distRio<1000?`a ${s.distRio} m del río`:`a ${(s.distRio/1000).toFixed(1).replace('.',',')} km del río`;
@@ -418,7 +431,7 @@ function drawRail(){const cur=S.step-1;
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
 function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2>${ayuda('ver todos los lugares detectados, ordenados del más urgente al menos urgente. Tocá uno para abrir su ficha.')}<p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}.</p><div class="list">`+
- (S.todas?r:r.slice(0,5)).map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'preliminar':'con laboratorio'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'+(r.length>5?`<button type="button" class="ghost mas" id="mas" aria-expanded="${!!S.todas}">${S.todas?'Mostrar solo las 5 más urgentes':`Ver los ${r.length} lugares`}</button>`:'')}
+ (S.todas?r:r.slice(0,5)).map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'sin análisis todavía':'con análisis'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'+(r.length>5?`<button type="button" class="ghost mas" id="mas" aria-expanded="${!!S.todas}">${S.todas?'Mostrar solo las 5 más urgentes':`Ver los ${r.length} lugares`}</button>`:'')}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
  const bar=(t,val,m)=>`<div class="fac"><span class="t">${t}</span><span class="chip c${val||0}">${['Sin dato','Bajo','Medio','Alto'][val||0]}</span><small>${esc(m)}</small></div>`;
@@ -427,7 +440,7 @@ function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===
  if(v&&v[0]!=='falso')rs.push(['img',`${VISL[v[0]]}: ${v[1]}`]);
  if(!/ a unos \d/.test(r.a[2]))rs.push(['salud',r.a[2]]);rs.push(['casa',r.b[1]]);if(s.pob)rs.push(['gente',`Unas ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km`]);rs.push(['hoja',r.c[1]]);
  return `<h2>${titulo(s)}</h2>${ayuda('entender por qué este lugar importa, qué dicen los satélites y qué conviene hacer.')}<p class="fsub">${esc(s.id)} · Prioridad ${pos} de ${S.sites.length}${s.comunidad?'':` · ${String(s.ha).replace('.',',')} hectáreas`}</p>
- <div class="fst"><span class="chip c${r.n}">${nivel(r)}</span><small>${r.pre?'Preliminar: sin análisis de laboratorio':'Confirmado con análisis de laboratorio'}</small></div>
+ <div class="fst"><span class="chip c${r.n}">${nivel(r)}</span><small>${r.pre?'Todavía sin análisis de laboratorio':'Confirmado con análisis de laboratorio'}</small></div>
  <h3 class="porq">¿Por qué es prioritario?</h3>
  <ul class="reasons">${rs.map(([k,t])=>`<li>${ico(k==='salud'?'gente':k)}<span>${esc(t)}</span></li>`).join('')}</ul>
  <div class="accion a${ac[0]}"><h3>Acción recomendada</h3><p>${esc(ac[1])}</p></div>
