@@ -1,5 +1,5 @@
 // MERCU-CERO: service worker para funcionar sin internet
-const VERSION = 'mercu-v1';
+const VERSION = 'mercu-v2';
 const APP = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -23,7 +23,14 @@ self.addEventListener('fetch', e => {
     }));
     return;
   }
-  // Archivos propios: primero la copia guardada, si no hay, la red
+  // La página: primero la red (para recibir actualizaciones); sin internet, la copia guardada
+  if (req.mode === 'navigate') {
+    e.respondWith(fetch(req).then(r => {
+      const copy = r.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); return r;
+    }).catch(() => caches.match('./index.html')));
+    return;
+  }
+  // Resto de archivos propios: primero la copia guardada, si no hay, la red
   if (url.origin === location.origin) {
     e.respondWith(caches.match(req, {ignoreSearch: true}).then(hit => hit || fetch(req).then(r => {
       const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r;

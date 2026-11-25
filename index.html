@@ -107,6 +107,7 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .fine{font-size:14px;color:var(--mut);max-width:1320px;margin:8px auto 0;padding:0 max(4vw,16px) 90px}
 .fine p{max-width:90ch}
 .navb{display:none}
+#view{scroll-margin-top:12px}
 @media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}.atlas{position:relative;top:0}.tabs{display:none}.list{max-height:none}
 .navb{display:grid;grid-template-columns:repeat(4,1fr);position:sticky;bottom:0;z-index:5;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
 .navb button{flex-direction:column;gap:2px;background:transparent;color:var(--mut);font-size:13px;min-height:54px;padding:0;border-radius:10px}
@@ -212,7 +213,7 @@ function drawMap(){const m=document.getElementById('map');m.setAttribute('viewBo
  ${sites}${intro?`<rect class="scan" style="--w:${MW+20}px" x="-12" y="0" width="12" height="${MH}" fill="url(#sg)"/>`:''}
  <defs><linearGradient id="sg"><stop offset="0" stop-color="#e8b75c" stop-opacity="0"/><stop offset="1" stop-color="#e8b75c" stop-opacity=".9"/></linearGradient></defs>`;
  intro=false;
- m.querySelectorAll('.site').forEach(g=>{const go=()=>{S.sel=g.dataset.id;S.view='ficha';render()};g.onclick=go;g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
+ m.querySelectorAll('.site').forEach(g=>{const go=()=>{S.sel=g.dataset.id;goView('ficha')};g.onclick=go;g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}}})}
 
 function drawRail(){const cur=S.step-1;
  document.getElementById('rail').innerHTML=STEPS.map((t,i)=>`<span class="${i<cur?'done':i===cur?'cur':''}"></span>`).join('');
@@ -220,7 +221,7 @@ function drawRail(){const cur=S.step-1;
  const g=document.getElementById('go');g.textContent=S.step===0?'Empezar':S.step>=6?'Volver a empezar':'Siguiente paso';g.onclick=next;
  const nav=b=>`<button data-v="${b[0]}" aria-pressed="${S.view===b[0]}">${ICON[b[0]]}<span>${b[1]}</span></button>`;
  document.getElementById('tabs').innerHTML=TABS.map(nav).join('');document.getElementById('navb').innerHTML=TABS.map(nav).join('');
- document.querySelectorAll('#tabs button,#navb button').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;render()})}
+ document.querySelectorAll('#tabs button,#navb button').forEach(b=>b.onclick=()=>goView(b.dataset.v))}
 
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
@@ -258,12 +259,14 @@ function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente');
  <p id="lerr" style="color:var(--hi);font-weight:700" aria-live="polite"></p><div class="acts"><button type="submit">Guardar resultado</button></div></form>`:'<div class="box">No hay muestras pendientes. Primero verificá un lugar con PROTEGE.</div>'}
  <div class="box" style="font-size:15px">Valor de referencia de demostración: ${CFG.refHg} mg/kg en sedimento. El valor real lo define el equipo con una norma o guía oficial.</div>`}
 
+// Cambia de sección y, en pantallas angostas, lleva la vista al contenido (queda debajo del mapa)
+function goView(v){S.view=v;render();if(matchMedia('(max-width:900px)').matches){const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;document.getElementById('view').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}}
 function render(){drawRail();drawMap();
  const v=document.getElementById('view');v.classList.remove('view');void v.offsetWidth;v.classList.add('view');
  v.innerHTML={ranking:vRanking,ficha:vFicha,protege:vProtege,lab:vLab}[S.view]();
- v.querySelectorAll('.row').forEach(r=>r.onclick=()=>{S.sel=r.dataset.id;S.view='ficha';render()});
+ v.querySelectorAll('.row').forEach(r=>r.onclick=()=>{S.sel=r.dataset.id;goView('ficha')});
  const g=(id,f)=>{const e=document.getElementById(id);if(e)e.onclick=f};
- g('toP',()=>{S.view='protege';render()});g('toL',()=>{S.view='lab';render()});
+ g('toP',()=>goView('protege'));g('toL',()=>goView('lab'));
  g('copy',async()=>{const s=site(S.sel),r=idx(s);const t=`MERCU-CERO, ${s.id}, ${s.mun} (${s.lat.toFixed(5)}, ${s.lon.toFixed(5)})\nÍndice: ${fmt(r.p)} (${r.lab})\nSalud ${r.a[0]}: ${r.a[2]}\nComunidad ${r.b[0]}: ${r.b[1]}\nNaturaleza ${r.c[0]}: ${r.c[1]}\nEstado: ${ESTADO[s.estado]}\nFuentes: Sentinel-2 2025, INE-UDAPE NBI 2024, WDPA, WorldPop 2020`;
   const m=document.getElementById('cmsg');try{await navigator.clipboard.writeText(t);m.textContent='Ficha copiada.'}catch(e){m.textContent='No se pudo copiar en este navegador.'}});
  const pf=document.getElementById('pf');if(pf){const ps=document.getElementById('ps');ps.onchange=()=>{S.sel=ps.value;drawMap()};
@@ -273,7 +276,7 @@ function render(){drawRail();drawMap();
    S.sel=s.id;save();render();document.getElementById('pmsg').textContent=`Reporte guardado${navigator.onLine?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`}}
  const lf=document.getElementById('lf');if(lf){lf.onsubmit=e=>{e.preventDefault();const val=parseFloat(document.getElementById('lv').value);const er=document.getElementById('lerr');
   if(!(val>=0)){er.textContent='Ingresá un valor numérico de 0 o más.';return}
-  const s=site(document.getElementById('ls').value);s.hg=val;s.estado='resultado';S.sel=s.id;S.view='ficha';save();render()};
+  const s=site(document.getElementById('ls').value);s.hg=val;s.estado='resultado';S.sel=s.id;save();goView('ficha')};
   document.getElementById('lv').oninput=()=>{document.getElementById('lerr').textContent=''}}
  save()}
 
