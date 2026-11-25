@@ -107,6 +107,17 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .fine{font-size:14px;color:var(--mut);max-width:1320px;margin:8px auto 0;padding:0 max(4vw,16px) 90px}
 .fine p{max-width:90ch}
 .navb{display:none}
+.seg{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:14px;margin:4px 0 14px}
+.seg button{flex:1;background:transparent;color:var(--mut);min-height:46px;padding:0 10px;font-size:15px;justify-content:center;text-align:center}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 0 0 1.5px var(--teal2)}
+.pick{position:relative;border-radius:14px;overflow:hidden;background:#04201e}
+.pick svg{display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair}
+.pick svg:focus-visible{outline:3px solid var(--gold2);outline-offset:-3px}
+.pick .zb{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
+.pick .zb button{min-height:42px;width:42px;padding:0;justify-content:center;background:#04201ed9;color:#fff;border:1px solid #ffffff55;font-size:22px}
+.pick .zl{position:absolute;left:8px;bottom:8px;font-size:13px;color:#e6f3ef;background:#04201ecc;padding:3px 8px;border-radius:8px}
+.steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
+.steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
 #view{scroll-margin-top:12px}
 @media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}.atlas{position:relative;top:0}.tabs{display:none}.list{max-height:none}
 .navb{display:grid;grid-template-columns:repeat(4,1fr);position:sticky;bottom:0;z-index:5;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
@@ -122,7 +133,7 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
    <div class="mw"><svg id="map" role="img" aria-label="Imagen satelital de la cuenca alta del río Beni con las pozas detectadas"></svg>
    <div class="ttl"><h1>MERCU-CERO</h1><p>Dónde están los relaves mineros que pueden llevar mercurio a los ríos del norte de La Paz, y cuáles atender primero.</p></div></div>
    <figcaption class="foot"><span><span class="net" id="net">Conectado</span> · Imagen Sentinel-2 de may a sep de 2025 (Copernicus)</span>
-    <span class="legend"><span class="grad">Menos riesgo <b></b> Más riesgo</span><span><i class="ring"></i>Confirmada en imagen</span><span>Tamaño = área</span></span></figcaption>
+    <span class="legend"><span class="grad">Menos riesgo <b></b> Más riesgo</span><span><i class="ring"></i>Confirmada en imagen</span><span>Tamaño = área</span><span>◆ Pedido de la comunidad</span></span></figcaption>
   </figure>
   <div class="side">
    <section class="how" aria-label="Cómo funciona">
@@ -153,21 +164,36 @@ const BG="data:image/webp;base64,UklGRgBzAABXRUJQVlA4WAoAAAAgAAAA8wEAtAEASUNDUMg
 const GUIA='S2-10';
 const VIS={'S2-09':['probable','El punto cae en el cauce; desmonte minero en la orilla.'],'S2-10':['confirmada','Frente minero con pozas de agua marrón y material lavado.'],'S2-20':['probable','Desmonte minero y pozas pequeñas junto al río.'],'S2-12':['dudosa','Cauce trenzado con grava removida; sin poza visible.'],'S2-34':['probable','El punto cae en el río; área removida en la orilla.'],'S2-39':['falso','Río en bosque sin señales de minería.'],'S2-21':['confirmada','Pozas rectangulares, orillas dragadas y maquinaria.'],'S2-16':['dudosa','Cauce ancho con playas de sedimento.'],'S2-40':['confirmada','Grandes pozas de excavación y campamento junto al río.'],'S2-33':['confirmada','Varias pozas mineras separadas del río.']};
 const VISL={confirmada:'Confirmada en imagen',probable:'Probable',dudosa:'Dudosa',falso:'Descartada (no es poza)'};
+// NBI municipal (INE-UDAPE, Censo 2024) para pedidos fuera de las pozas detectadas
+const NBI={Apolo:66.77,Caranavi:55.85,Guanay:38.07,Mapiri:36.07,'Palos Blancos':54.92,Tacacoma:62.15,Teoponte:56.74,Tipuani:35.14};
+const KX=111.32*Math.cos(15.45*Math.PI/180),KY=110.57;
+const km=(a,b,c,d)=>Math.hypot((a-c)*KX,(b-d)*KY);
+function inPoly(x,y,P){let o=false;for(let a=0,b=P.length-1;a<P.length;b=a++){const[xi,yi]=P[a],[xj,yj]=P[b];if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)o=!o}return o}
+function segKm(x0,y0,[ax,ay],[bx,by]){const x=x0*KX,y=y0*KY,x1=ax*KX,y1=ay*KY,dx=bx*KX-x1,dy=by*KY-y1,L=dx*dx+dy*dy;let t=L?((x-x1)*dx+(y-y1)*dy)/L:0;t=Math.max(0,Math.min(1,t));return Math.hypot(x-x1-t*dx,y-y1-t*dy)}
+let RIOS=null;
+// Distancias aproximadas desde un punto marcado: río (agua permanente JRC), Apolobamba y poza detectada más cercana
+function lugar(lon,lat){RIOS=RIOS||DATA.rios.split(';').map(q=>q.split(',').map(Number));
+ let rio=Infinity;for(const[a,b]of RIOS){const d=km(lon,lat,a,b);if(d<rio)rio=d}
+ const P=DATA.apo;let ap=inPoly(lon,lat,P)?0:Infinity;if(ap)for(let i=0;i<P.length;i++)ap=Math.min(ap,segKm(lon,lat,P[i],P[(i+1)%P.length]));
+ const near=S.sites.filter(x=>!x.comunidad).map(x=>({x,d:km(lon,lat,x.lon,x.lat)})).sort((a,b)=>a.d-b.d)[0];
+ return{rio:Math.round(rio*1000),apKm:+ap.toFixed(2),near:near.x,nearKm:near.d}}
+const PK={lon:null,lat:null,z:1,cx:0,cy:0};
 const PUEBLOS=[['Guanay',-67.8833,-15.4976],['Tipuani',-68.0255,-15.5477],['Teoponte',-67.65,-15.35]];
 const B={w:-68.40,e:-67.60,n:-15.10,s:-15.80},MW=600,MH=Math.round(600*(B.n-B.s)/((B.e-B.w)*Math.cos(15.45*Math.PI/180)));
 const px=(lon,lat)=>[((lon-B.w)/(B.e-B.w)*MW).toFixed(1),((B.n-lat)/(B.n-B.s)*MH).toFixed(1)];
 const STEPS=['Detectar por satélite','Priorizar visitas','Verificar en el lugar','Analizar en laboratorio','Evaluar el riesgo','Decidir qué remediar'];
-const ESTADO={candidato:'Candidato satelital',verificado:'Verificado en campo',pendiente:'Pendiente de laboratorio',resultado:'Con resultado de laboratorio'};
+const ESTADO={solicitud:'Pedido por la comunidad',candidato:'Candidato satelital',verificado:'Verificado en campo',pendiente:'Pendiente de laboratorio',resultado:'Con resultado de laboratorio'};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load=()=>{try{return JSON.parse(localStorage.getItem('mercu-app-v1')||'null')}catch(e){return null}};
 const save=()=>{try{localStorage.setItem('mercu-app-v1',JSON.stringify(S))}catch(e){}};
-const fresh=()=>({sites:BASE.map(s=>({estado:'candidato',...s,sospecha:true})),step:0,sel:GUIA,view:'ranking',reports:[]});
-let S=load()||fresh();
+const fresh=()=>({sites:BASE.map(s=>({estado:'candidato',...s,sospecha:true})),step:0,sel:GUIA,view:'ranking',reports:[],solicitudes:[],pmode:'reporte'});
+let S=load()||fresh();S.solicitudes=S.solicitudes||[];
 
 function vsh(s){const exp=s.exp===true;
  if(typeof s.hg==='number'){if(s.hg>CFG.refHg)return exp?[3,false,'Laboratorio supera la referencia y hay vía de exposición']:[2,false,'Laboratorio supera la referencia, sin vía de exposición documentada'];return[1,false,'Laboratorio por debajo de la referencia']}
  const con=s.distRio<=CFG.rioM||s.drena===true||exp;
- return s.sospecha&&con?[2,true,s.distRio<=CFG.rioM?`Sospecha minera a ${s.distRio} m del río`:'Sospecha minera; el drenaje corre hacia el río']:[1,true,'Sin vía de exposición documentada']}
+ const o=s.comunidad?'Pedido de la comunidad':'Sospecha minera';
+ return s.sospecha&&con?[2,true,s.distRio<=CFG.rioM?`${o} a unos ${s.distRio} m del río`:exp?`${o}; la gente usa esa agua o pesca ahí`:`${o}; el drenaje corre hacia el río`]:[1,true,'Sin vía de exposición documentada']}
 function vs(s){const n=s.nbi;if(n==null)return[null,'Municipio sin dato de NBI'];return[n>60?3:n>=40?2:1,`NBI ${String(n).replace('.',',')} % en ${s.mun}`]}
 function ve(s){return s.apKm===0?[3,`Dentro de ${s.ap||'un área protegida'}`]:s.apKm<=CFG.apKm?[2,`A ${Math.round(s.apKm*1000)} m de ${s.ap||'un área protegida'}`]:[1,`A ${String(s.apKm.toFixed(1)).replace('.',',')} km del área protegida más cercana`]}
 function idx(s){const a=vsh(s),b=vs(s),c=ve(s);if(b[0]==null)return{p:-1,n:0,pre:true,a,b,c,lab:'Sin datos suficientes'};const p=Math.round((CFG.alfa*a[0]+CFG.beta*b[0]+(1-CFG.alfa-CFG.beta)*c[0])*100)/100;const n=Math.min(3,Math.floor(p+.5));return{p,n,pre:a[1],a,b,c,lab:['','Bajo','Medio','Alto'][n]+(a[1]?' (preliminar)':'')}}
@@ -181,7 +207,7 @@ function next(){const c=site(GUIA);
  acts[S.step]();S.step++;save();render()}
 
 function saveReport(s,d){Object.assign(s,{exp:d.exp,drena:d.drena||s.drena,estado:'pendiente'});S.reports.push({id:'PR-'+String(S.reports.length+1).padStart(3,'0'),sitio:s.id,fecha:new Date().toLocaleString('es-BO'),enviado:false,...d});setTimeout(sync,800)}
-function sync(){if(!navigator.onLine)return;const p=S.reports.filter(r=>!r.enviado);if(!p.length)return;setTimeout(()=>{p.forEach(r=>{r.enviado=true});save();if(S.view==='protege')render()},1200)}
+function sync(){if(!navigator.onLine)return;const p=[...S.reports,...S.solicitudes].filter(r=>!r.enviado);if(!p.length)return;setTimeout(()=>{p.forEach(r=>{r.enviado=true});save();if(S.view==='protege')render()},1200)}
 
 const ICON={
  ranking:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>',
@@ -199,12 +225,12 @@ function drawMap(){const m=document.getElementById('map');m.setAttribute('viewBo
  const apo='M'+DATA.apo.map(([x,y])=>px(x,y).join(' ')).join('L')+'Z';
  const [ax,ay]=px(-68.30,-15.40);
  const sites=S.sites.map(s=>{const i=idx(s);const [x,y]=px(s.lon,s.lat);const sel=s.id===S.sel;const v=(VIS[s.id]||[])[0];
-  const r=(4+Math.sqrt(s.ha)*1.1+(sel?3:0)).toFixed(1);
+  const r=(4+Math.sqrt(s.ha||4)*1.1+(sel?3:0)).toFixed(1);
   const st=v==='confirmada'?'stroke="#fff" stroke-width="2.6"':v==='probable'?'stroke="#fff" stroke-width="1.4"':v==='dudosa'?'stroke="#fff" stroke-width="1.4" stroke-dasharray="2 2"':'stroke="#04201e" stroke-width="1"';
   const fill=v==='falso'?'fill="none" stroke="#fff" stroke-width="1.4" opacity=".55"':`fill="${sc(i.p)}" ${st}`;
   const d=intro?` style="animation-delay:${(.3+2.4*x/MW).toFixed(2)}s"`:'';
   const right=+x>MW-110;
-  return `<g class="site${intro?' pond':''}"${d} data-id="${esc(s.id)}" tabindex="0" role="button" aria-label="${esc(s.id)}, ${esc(s.mun)}, ${esc(i.lab)}">${sel?`<circle class="pulse" cx="${x}" cy="${y}" r="${r}" fill="${sc(i.p)}"/>`:''}<circle cx="${x}" cy="${y}" r="${r}" ${fill}/>${sel?`<text x="${right?+x-r-6:+x+(+r)+6}" y="${+y+5}" text-anchor="${right?'end':'start'}" font-size="16" font-weight="700" fill="#fff">${esc(s.id)}</text>`:''}</g>`}).join('');
+  return `<g class="site${intro?' pond':''}"${d} data-id="${esc(s.id)}" tabindex="0" role="button" aria-label="${esc(s.id)}, ${esc(s.mun)}, ${esc(i.lab)}">${sel?`<circle class="pulse" cx="${x}" cy="${y}" r="${r}" fill="${sc(i.p)}"/>`:''}${s.comunidad?`<path d="M${x} ${y-r-3}L${+x+(+r)+3} ${y}L${x} ${+y+(+r)+3}L${x-r-3} ${y}Z" fill="${sc(i.p)}" stroke="#fff" stroke-width="2.4"/>`:`<circle cx="${x}" cy="${y}" r="${r}" ${fill}/>`}${sel?`<text x="${right?+x-r-6:+x+(+r)+6}" y="${+y+5}" text-anchor="${right?'end':'start'}" font-size="16" font-weight="700" fill="#fff">${esc(s.id)}</text>`:''}</g>`}).join('');
  m.innerHTML=`<image href="${BG}" x="0" y="0" width="${MW}" height="${MH}" preserveAspectRatio="none"/>
  <rect width="${MW}" height="${MH}" fill="#04201e" opacity=".18"/>
  <path d="${apo}" fill="#9be3c0" fill-opacity=".12" stroke="#9be3c0" stroke-width="1.4" stroke-dasharray="5 4"/>
@@ -225,25 +251,24 @@ function drawRail(){const cur=S.step-1;
 
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
-function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2><p class="lead">${S.sites.length} posibles pozas de relave detectadas por satélite, de mayor a menor riesgo. Tocá una para ver por qué.</p><div class="list">`+
- r.map((x,i)=>`<div class="row${x.s.id===S.sel?' sel':''}" data-id="${esc(x.s.id)}"><span class="n">${i+1}</span><span><b>${esc(x.s.id)}</b>, ${esc(x.s.mun)}<small>${visTag(x.s.id)}${String(x.s.ha).replace('.',',')} ha · ${x.s.pob.toLocaleString('es-BO')} personas cerca</small></span><span><span class="dot" style="background:${sc(x.r.p)}"></span><span class="score">${fmt(x.r.p)}</span><span class="chip c${x.r.n}">${esc(x.r.lab)}</span></span></div>`).join('')+'</div>'}
+function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2><p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${S.sites.some(s=>s.comunidad)?` y ${S.sites.filter(s=>s.comunidad).length} pedidos de la comunidad`:''}, de mayor a menor riesgo. Tocá uno para ver por qué.</p><div class="list">`+
+ r.map((x,i)=>`<div class="row${x.s.id===S.sel?' sel':''}" data-id="${esc(x.s.id)}"><span class="n">${i+1}</span><span><b>${esc(x.s.id)}</b>, ${esc(x.s.mun)}<small>${visTag(x.s.id)}${x.s.comunidad?`Pedido de la comunidad${x.s.lugar?': '+esc(x.s.lugar):''}`:`${String(x.s.ha).replace('.',',')} ha · ${x.s.pob.toLocaleString('es-BO')} personas cerca`}</small></span><span><span class="dot" style="background:${sc(x.r.p)}"></span><span class="score">${fmt(x.r.p)}</span><span class="chip c${x.r.n}">${esc(x.r.lab)}</span></span></div>`).join('')+'</div>'}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
  const bar=(t,val,m)=>`<div class="vul"><span class="t">${t}</span><b>${val??'–'}</b><span class="bar"><span style="width:${(val||0)/3*100}%"></span></span><small>${esc(m)}</small></div>`;
- const miss=[typeof s.hg!=='number'&&'análisis de laboratorio',s.estado==='candidato'&&'verificación en el lugar'].filter(Boolean);
- return `<h2>${esc(s.id)}: posible poza de relave</h2><p class="lead">${esc(s.mun)}. ${String(s.ha).replace('.',',')} hectáreas, a ${s.distRio} m del río. ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km.</p>
+ const miss=[typeof s.hg!=='number'&&'análisis de laboratorio',s.estado==='candidato'&&'verificación en el lugar',s.estado==='solicitud'&&'visita técnica'].filter(Boolean);
+ return `<h2>${esc(s.id)}: ${s.comunidad?'pedido de evaluación de la comunidad':'posible poza de relave'}</h2><p class="lead">${s.comunidad?`${esc(s.lugar||'Punto marcado en el mapa')}, ${esc(s.mun)}. A unos ${s.distRio} m del río (aproximado).`:`${esc(s.mun)}. ${String(s.ha).replace('.',',')} hectáreas, a ${s.distRio} m del río. ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km.`}</p>
  <div class="box"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><span class="big"><span class="dot" style="background:${sc(r.p)};width:22px;height:22px;vertical-align:8px"></span>${fmt(r.p)}</span><span><span class="chip c${r.n}">${esc(r.lab)}</span><br><small style="color:var(--mut)">Puesto ${pos} de ${S.sites.length}, en una escala de 1 a 3</small></span></div>
  ${bar(PLAIN.a,r.a[0],r.a[2])}${bar(PLAIN.b,r.b[0],r.b[1])}${bar(PLAIN.c,r.c[0],r.c[1])}</div>
- ${v?`<div class="box"><b>Mirada en imagen de alta resolución:</b> ${visTag(s.id)}${esc(v[1])}</div>`:''}
+ ${s.comunidad?solBox(s):''}${v?`<div class="box"><b>Mirada en imagen de alta resolución:</b> ${visTag(s.id)}${esc(v[1])}</div>`:''}
  ${r.pre?'<div class="warn"><b>Todavía es una sospecha.</b> El satélite no ve el mercurio: muestra lugares que parecen relaves. Solo un análisis de laboratorio lo confirma.</div>':''}
  ${typeof s.hg==='number'?`<div class="box">Laboratorio (simulado): <b>${String(s.hg).replace('.',',')} mg/kg</b> de mercurio en sedimento. Referencia de demostración: ${CFG.refHg} mg/kg.</div>`:''}
  ${miss.length?`<p class="lead">Falta: ${miss.map(esc).join(' y ')}.</p>`:''}
- <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'?'<button id="toL">Cargar laboratorio</button>':''}<a class="btn blue" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>`}
+ <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'||s.estado==='solicitud'?'<button id="toL">Cargar laboratorio</button>':''}<a class="btn blue" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>`}
 
-function vProtege(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>`<option value="${esc(s.id)}"${s.id===S.sel?' selected':''}>${esc(s.id)}, ${esc(s.mun)}, ${String(s.ha).replace('.',',')} ha</option>`).join('');
+function vReporte(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>`<option value="${esc(s.id)}"${s.id===S.sel?' selected':''}>${esc(s.id)}, ${esc(s.mun)}, ${String(s.ha).replace('.',',')} ha</option>`).join('');
  const yn=(n,q)=>`<label>${q}</label><div class="opts">${['Sí','No','No sé'].map(v=>`<label><input type="radio" name="${n}" value="${v}" ${v==='No sé'?'checked':''}>${v}</label>`).join('')}</div>`;
- return `<h2>PROTEGE</h2><p class="lead">Si estás cerca de uno de estos lugares, contanos qué ves. Se guarda en el teléfono aunque no haya señal.</p>
- <div class="warn"><b>Tu seguridad primero.</b> No toques el material ni te acerques a donde se quema amalgama. Tu reporte es anónimo.</div>
+ return `<p class="lead">Elegí una de las pozas que detectó el satélite y contanos qué ves.</p>
  ${opts?`<form id="pf"><label for="ps">Lugar</label><select id="ps">${opts}</select>
  ${yn('arena','¿Ves montones de tierra o arena lavada cerca del río?')}${yn('color','¿El agua tiene un color distinto al normal?')}${yn('drena','¿El agua de este lugar corre hacia el río?')}${yn('exp','¿La gente pesca o toma agua río abajo?')}
  <label>¿Qué tan urgente te parece?</label><div class="opts">${[['BAJO','Poco'],['MEDIO','Algo'],['ALTO','Mucho']].map(([v,t])=>`<label><input type="radio" name="nivel" value="${v}" ${v==='MEDIO'?'checked':''}>${t}</label>`).join('')}</div>
@@ -251,7 +276,77 @@ function vProtege(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>
  <label for="pdesc">¿Qué viste? (opcional)</label><textarea id="pdesc" rows="3" maxlength="500"></textarea>
  <div class="acts"><button type="submit">Guardar reporte</button></div></form>`:'<p class="lead">Ya no quedan lugares por verificar en esta demo.</p>'}<p id="pmsg" class="msg" aria-live="polite"></p>${S.reports.length?`<h2 style="font-size:20px;margin-top:22px">Mis reportes</h2>${S.reports.slice().reverse().map(r=>`<div class="row" style="cursor:default"><span class="n" style="font-size:16px">${esc(r.id.slice(3))}</span><span><b>${esc(r.sitio)}</b><small>${esc(r.fecha)}</small></span><span class="tag ${r.enviado?'ok':''}">${r.enviado?'Enviado':'En el teléfono, esperando señal'}</span></div>`).join('')}<p class="lead" style="font-size:14px;margin-top:8px">En esta versión el envío es de demostración: todavía no hay un servidor conectado.</p>`:''}`}
 
-function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente');
+function vProtege(){const md=S.pmode||'reporte';
+ return `<h2>PROTEGE</h2><p class="lead">Tu palabra cuenta. Avisá lo que ves cerca de una poza o pedí que evalúen el río de tu zona. Todo se guarda en el teléfono aunque no haya señal.</p>
+ <div class="seg" role="group" aria-label="Qué querés hacer"><button type="button" data-m="reporte" aria-pressed="${md==='reporte'}">Reportar una poza</button><button type="button" data-m="solicitud" aria-pressed="${md==='solicitud'}">Pedir evaluación de mi zona</button></div>
+ <div class="warn"><b>Tu seguridad primero.</b> No toques el material ni te acerques a donde se quema amalgama. No pedimos tu nombre.</div>
+ ${md==='reporte'?vReporte():vSolicitud()}`}
+
+const PREO=['Agua para tomar','Pesca','Cultivos o animales','Poza o relave nuevo','Quema de amalgama','La gente se siente mal'];
+const PIDE=['Análisis del agua','Análisis del pescado','Visita técnica','Información'];
+const SEGUI=['Guardada en el teléfono','Enviada','En revisión','Visita o muestreo','Resultado'];
+const radios=(n,arr,def)=>`<div class="opts" role="radiogroup">${arr.map(v=>`<label><input type="radio" name="${n}" value="${v}"${v===def?' checked':''}>${v}</label>`).join('')}</div>`;
+function solBox(s){const q=S.solicitudes.find(x=>x.sitio===s.id);if(!q)return'';
+ return `<div class="box"><b>Lo que pidió la comunidad:</b> ${esc(q.pide)}.<br>Le preocupa: ${esc(q.preo.join(', ').toLowerCase())}.<br>Familias que usan esa agua o pescan ahí: ${esc(q.fam)}. Lo nota desde hace: ${esc(q.desde.toLowerCase())}.${q.desc?`<br>“${esc(q.desc)}”`:''}<div class="steps">${segui(q)}</div></div>`}
+function segui(q){const n=q.enviado?2:1;return SEGUI.map((t,i)=>`<span class="${i<n?'done':''}">${i<n?'✓ ':''}${t}</span>`).join('')}
+
+function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,'es'));
+ return `<p class="lead">El satélite no ve todo. Si te preocupa un río, una quebrada o un lugar de tu comunidad, marcalo y pedí que lo evalúen. Tu pedido entra al mapa de prioridades.</p>
+ <form id="sf" novalidate>
+ <label id="l-pick">¿Dónde está el problema?</label>
+ <div class="pick"><svg id="pick" tabindex="0" aria-labelledby="l-pick" aria-describedby="pinfo"></svg><div class="zb"><button type="button" id="zin" aria-label="Acercar el mapa">+</button><button type="button" id="zout" aria-label="Alejar el mapa">−</button></div><span class="zl" id="zl"></span></div>
+ <div class="acts" style="margin-top:8px"><button type="button" class="ghost" id="geo">Usar mi ubicación</button></div>
+ <p id="pinfo" class="lead" style="font-size:15px;margin-top:8px" aria-live="polite"></p>
+ <label for="smun">Municipio</label><select id="smun"><option value="">Elegí el municipio</option>${muns.map(m=>`<option>${esc(m)}</option>`).join('')}</select>
+ <label for="slug">Nombre del lugar (opcional)</label><input id="slug" type="text" maxlength="80" placeholder="Comunidad, quebrada o río">
+ <label>¿Qué te preocupa? Podés marcar varias</label><div class="opts">${PREO.map(v=>`<label><input type="checkbox" name="preo" value="${v}">${v}</label>`).join('')}</div>
+ <label>¿Qué pedís?</label>${radios('pide',PIDE,'Análisis del agua')}
+ <label>¿Cuántas familias usan esa agua o pescan ahí?</label>${radios('fam',['1 a 5','6 a 20','21 a 50','Más de 50','No sé'],'No sé')}
+ <label>¿Desde cuándo lo notás?</label>${radios('desde',['Semanas','Meses','Años','No sé'],'No sé')}
+ <label for="sfoto">Foto (opcional)</label><input id="sfoto" type="file" accept="image/*"><img id="simg" class="thumb" alt="Foto adjunta" hidden>
+ <label for="sdesc">Contalo con tus palabras (opcional)</label><textarea id="sdesc" rows="3" maxlength="500"></textarea>
+ <p id="serr" style="color:var(--hi);font-weight:700" aria-live="polite"></p>
+ <div class="acts"><button type="submit">Enviar solicitud</button></div></form><p id="smsg" class="msg" aria-live="polite"></p>
+ ${S.solicitudes.length?`<h2 style="font-size:20px;margin-top:22px">Mis solicitudes</h2>${S.solicitudes.slice().reverse().map(q=>`<div class="row" data-id="${esc(q.sitio)}"><span class="n" style="font-size:16px">${esc(q.id.slice(4))}</span><span><b>${esc(q.id)}</b>, ${esc(q.lugar||q.mun)}<small>${esc(q.pide)} · ${esc(q.fecha)}</small><span class="steps">${segui(q)}</span></span><span></span></div>`).join('')}<p class="lead" style="font-size:14px;margin-top:8px">Los pasos siguientes los marca el equipo de evaluación. En esta versión de demostración no hay un servidor conectado.</p>`:''}`}
+
+function pickVB(){const w=MW/PK.z,h=MH/PK.z;return[Math.max(0,Math.min(MW-w,PK.cx-w/2)),Math.max(0,Math.min(MH-h,PK.cy-h/2)),w,h]}
+function drawPick(){const m=document.getElementById('pick');if(!m)return;const[x,y,w,h]=pickVB();m.setAttribute('viewBox',`${x} ${y} ${w} ${h}`);const k=1/PK.z;
+ const dots=S.sites.map(s=>{const[a,b]=px(s.lon,s.lat);return `<circle cx="${a}" cy="${b}" r="${4*k}" fill="${sc(idx(s).p)}" stroke="#04201e" stroke-width="${k}"/>`}).join('');
+ const towns=PUEBLOS.map(([t,lo,la])=>{const[a,b]=px(lo,la);return `<rect x="${a-4*k}" y="${b-4*k}" width="${8*k}" height="${8*k}" fill="#fff"/><text x="${+a+8*k}" y="${+b+5*k}" font-size="${14*k}" font-weight="700" fill="#fff" stroke="#04201e" stroke-width="${3*k}" paint-order="stroke">${t}</text>`}).join('');
+ let pin='';if(PK.lon!=null){const[a,b]=px(PK.lon,PK.lat);pin=`<g transform="translate(${a} ${b}) scale(${k})"><circle r="14" fill="#e8b75c" opacity=".4"/><path d="M0 0C-8-11-11-15-11-21a11 11 0 0 1 22 0c0 6-3 10-11 21z" fill="#d9382c" stroke="#fff" stroke-width="2"/><circle cy="-21" r="4" fill="#fff"/></g>`}
+ m.innerHTML=`<image href="${BG}" x="0" y="0" width="${MW}" height="${MH}" preserveAspectRatio="none"/>${dots}${towns}${pin}`;
+ m.setAttribute('aria-label',PK.lon==null?'Mapa para marcar el lugar. Tocá para poner el punto; con las flechas del teclado lo movés.':`Punto marcado en ${PK.lat.toFixed(4)}, ${PK.lon.toFixed(4)}.`);
+ document.getElementById('zl').textContent=PK.z>1?`Acercado ×${PK.z.toFixed(1).replace('.',',').replace(',0','')}`:'Vista completa';
+ const inf=document.getElementById('pinfo');
+ if(PK.lon==null){inf.textContent='Tocá el mapa donde está el río o el lugar que te preocupa. Después podés acercar con + y tocar de nuevo para ajustar el punto.';return}
+ const L=lugar(PK.lon,PK.lat);
+ inf.innerHTML=`<b>Punto marcado:</b> ${PK.lat.toFixed(4)}, ${PK.lon.toFixed(4)}. Río más cercano a unos ${L.rio.toLocaleString('es-BO')} m; poza detectada más cercana: ${esc(L.near.id)}, a ${L.nearKm.toFixed(1).replace('.',',')} km (distancias aproximadas). <a href="https://www.google.com/maps/@${PK.lat},${PK.lon},700m/data=!3m1!1e3" target="_blank" rel="noopener">Ver el punto en Google Maps</a>`;
+ const sm=document.getElementById('smun');if(sm&&sm.dataset.t!=='1'&&NBI[L.near.mun]!=null)sm.value=L.near.mun}
+function setPin(lon,lat,zoom){PK.lon=Math.max(B.w,Math.min(B.e,lon));PK.lat=Math.max(B.s,Math.min(B.n,lat));const[a,b]=px(PK.lon,PK.lat);PK.cx=+a;PK.cy=+b;if(zoom&&PK.z<zoom)PK.z=zoom;document.getElementById('serr').textContent='';drawPick()}
+function bindSolicitud(){const sf=document.getElementById('sf');if(!sf)return;const m=document.getElementById('pick');drawPick();
+ m.onclick=e=>{const p=m.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(m.getScreenCTM().inverse());setPin(B.w+q.x/MW*(B.e-B.w),B.n-q.y/MH*(B.n-B.s),2.5)};
+ m.onkeydown=e=>{const d={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[e.key];if(!d)return;e.preventDefault();const st=.004/PK.z;if(PK.lon==null){setPin((B.w+B.e)/2,(B.n+B.s)/2,2.5);return}setPin(PK.lon+d[0]*st,PK.lat+d[1]*st)};
+ const zoom=f=>{PK.z=Math.max(1,Math.min(4,PK.z*f));if(PK.z<1.05)PK.z=1;if(PK.lon==null&&PK.z>1&&!PK.cx){PK.cx=MW/2;PK.cy=MH/2}drawPick()};
+ document.getElementById('zin').onclick=()=>zoom(1.6);document.getElementById('zout').onclick=()=>zoom(1/1.6);
+ document.getElementById('smun').onchange=e=>{e.target.dataset.t='1'};
+ document.getElementById('geo').onclick=()=>{const inf=document.getElementById('pinfo');if(!navigator.geolocation){inf.textContent='Este teléfono no permite obtener la ubicación. Marcá el punto en el mapa.';return}
+  inf.textContent='Buscando tu ubicación…';
+  navigator.geolocation.getCurrentPosition(g=>{const{latitude:la,longitude:lo}=g.coords;if(lo<B.w||lo>B.e||la<B.s||la>B.n){inf.textContent='Tu ubicación está fuera de la zona piloto (Guanay, Tipuani, Mapiri y Teoponte). Marcá el punto a mano en el mapa.';return}setPin(lo,la,3)},
+   ()=>{inf.textContent='No se pudo obtener tu ubicación. Revisá que el GPS esté prendido o marcá el punto en el mapa.'},{enableHighAccuracy:true,timeout:12000})};
+ document.getElementById('sfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('simg');if(f){im.src=URL.createObjectURL(f);im.hidden=false}};
+ sf.onsubmit=e=>{e.preventDefault();const er=document.getElementById('serr');const preo=[...sf.querySelectorAll('input[name=preo]:checked')].map(i=>i.value);const mun=document.getElementById('smun').value;
+  if(PK.lon==null){er.textContent='Falta marcar el lugar en el mapa.';document.getElementById('pick').focus();return}
+  if(!mun){er.textContent='Falta elegir el municipio.';document.getElementById('smun').focus();return}
+  if(!preo.length){er.textContent='Marcá al menos una cosa que te preocupa.';return}
+  const val=n=>sf.querySelector(`input[name=${n}]:checked`).value,L=lugar(PK.lon,PK.lat),n=S.solicitudes.length+1;
+  const id='C-'+String(n).padStart(2,'0'),sid='SOL-'+String(n).padStart(3,'0'),lug=document.getElementById('slug').value.trim();
+  S.sites.push({id,mun,nbi:NBI[mun]??null,ha:null,pob:null,distRio:L.rio,apKm:L.apKm,ap:L.apKm<=CFG.apKm*5?'Apolobamba':null,lon:+PK.lon.toFixed(5),lat:+PK.lat.toFixed(5),estado:'solicitud',sospecha:true,comunidad:true,lugar:lug,exp:preo.includes('Agua para tomar')||preo.includes('Pesca')});
+  S.solicitudes.push({id:sid,sitio:id,mun,lugar:lug,preo,pide:val('pide'),fam:val('fam'),desde:val('desde'),desc:document.getElementById('sdesc').value.trim(),fecha:new Date().toLocaleString('es-BO'),enviado:false});
+  PK.lon=PK.lat=null;PK.z=1;S.sel=id;save();render();
+  document.getElementById('smsg').textContent=`Solicitud ${sid} guardada${navigator.onLine?'':' en el teléfono; se enviará cuando haya señal'}. Tu punto ya está en el mapa como ${id} y entra en la lista de prioridades.`;setTimeout(sync,800)};
+}
+
+function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||s.estado==='solicitud');
  return `<h2>Laboratorio</h2><p class="lead">Cuando llega el análisis de una muestra, se carga acá y el riesgo se recalcula. En esta demo el resultado es simulado.</p>
  ${pend.length?`<form id="lf"><label for="ls">Lugar con muestra tomada</label><select id="ls">${pend.map(s=>`<option value="${esc(s.id)}">${esc(s.id)}, ${esc(s.mun)}</option>`).join('')}</select>
  <label for="lv">Mercurio en sedimento (mg/kg)</label><input id="lv" type="number" step="0.01" min="0" value="3.2" inputmode="decimal">
@@ -264,7 +359,7 @@ function goView(v){S.view=v;render();if(matchMedia('(max-width:900px)').matches)
 function render(){drawRail();drawMap();
  const v=document.getElementById('view');v.classList.remove('view');void v.offsetWidth;v.classList.add('view');
  v.innerHTML={ranking:vRanking,ficha:vFicha,protege:vProtege,lab:vLab}[S.view]();
- v.querySelectorAll('.row').forEach(r=>r.onclick=()=>{S.sel=r.dataset.id;goView('ficha')});
+ v.querySelectorAll('.row[data-id]').forEach(r=>r.onclick=()=>{S.sel=r.dataset.id;goView('ficha')});
  const g=(id,f)=>{const e=document.getElementById(id);if(e)e.onclick=f};
  g('toP',()=>goView('protege'));g('toL',()=>goView('lab'));
  g('copy',async()=>{const s=site(S.sel),r=idx(s);const t=`MERCU-CERO, ${s.id}, ${s.mun} (${s.lat.toFixed(5)}, ${s.lon.toFixed(5)})\nÍndice: ${fmt(r.p)} (${r.lab})\nSalud ${r.a[0]}: ${r.a[2]}\nComunidad ${r.b[0]}: ${r.b[1]}\nNaturaleza ${r.c[0]}: ${r.c[1]}\nEstado: ${ESTADO[s.estado]}\nFuentes: Sentinel-2 2025, INE-UDAPE NBI 2024, WDPA, WorldPop 2020`;
@@ -274,6 +369,8 @@ function render(){drawRail();drawMap();
   pf.onsubmit=e=>{e.preventDefault();const val=n=>pf.querySelector(`input[name=${n}]:checked`).value;const s=site(ps.value);
    saveReport(s,{exp:val('exp')==='Sí',drena:val('drena')==='Sí',senal:[val('arena')==='Sí'&&'Arena lavada',val('color')==='Sí'&&'Agua de otro color'].filter(Boolean),nivel:val('nivel'),desc:document.getElementById('pdesc').value});
    S.sel=s.id;save();render();document.getElementById('pmsg').textContent=`Reporte guardado${navigator.onLine?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`}}
+ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{S.pmode=b.dataset.m;render()});
+ bindSolicitud();
  const lf=document.getElementById('lf');if(lf){lf.onsubmit=e=>{e.preventDefault();const val=parseFloat(document.getElementById('lv').value);const er=document.getElementById('lerr');
   if(!(val>=0)){er.textContent='Ingresá un valor numérico de 0 o más.';return}
   const s=site(document.getElementById('ls').value);s.hg=val;s.estado='resultado';S.sel=s.id;save();goView('ficha')};
