@@ -116,6 +116,36 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .pick .zb{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
 .pick .zb button{min-height:42px;width:42px;padding:0;justify-content:center;background:#04201ed9;color:#fff;border:1px solid #ffffff55;font-size:22px}
 .pick .zl{position:absolute;left:8px;bottom:8px;font-size:13px;color:#e6f3ef;background:#04201ecc;padding:3px 8px;border-radius:8px}
+.row.rk{grid-template-columns:1.6em minmax(0,1fr);align-items:start}
+.rk .n{padding-top:1px}.rh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rh b{font-size:17px;line-height:1.3}
+.rk small{margin-top:3px}.rk .rid{font-size:13px;margin-top:5px}
+.verdict{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap}
+.vw{font-family:Outfit;font-weight:800;font-size:clamp(34px,5vw,44px);line-height:1.05}
+.c3t{color:var(--hi)}.c2t{color:light-dark(#9a6500,var(--md))}.c1t{color:light-dark(#2b7552,var(--lo))}.c0t{color:var(--mut)}
+.vp{font-weight:700;color:var(--mut)}
+.meter{position:relative;height:12px;border-radius:99px;margin:16px 0 4px;background:linear-gradient(90deg,rgb(246,228,160),rgb(236,170,40) 37%,rgb(222,92,38) 67%,rgb(160,22,18))}
+.meter .mk{position:absolute;top:-6px;width:6px;height:24px;border-radius:3px;background:var(--ink);transform:translateX(-50%);box-shadow:0 0 0 2px var(--bg)}
+.ml{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
+.why{font-size:17px;margin:18px 0 0}
+.fac{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.why+.fac{border-top:0}.fac .t{font-weight:700}.fac small{grid-column:1/-1;color:var(--mut);font-size:15px}
+.gbtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);color:var(--ink);border:1.5px solid var(--teal2);border-radius:18px;padding:12px 16px;min-height:64px;margin-bottom:14px;text-align:left;font-weight:400}
+.gbtn:hover{background:var(--bg)}.gbtn svg{flex:none;width:40px;height:40px}.gbtn b{display:block;font-size:17px}.gbtn span{color:var(--mut);font-size:15px}
+.guide[hidden]{display:none}
+.guide{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:#021412d9;padding:16px}
+.gcard{background:var(--card);color:var(--ink);border-radius:22px;max-width:430px;width:100%;padding:18px 18px 16px;box-shadow:0 24px 70px #000a;animation:in .25s ease-out}
+.gill{border-radius:16px;overflow:hidden;background:#06302b;aspect-ratio:16/10;margin-bottom:14px}.gill svg{width:100%;height:100%;display:block}
+.gcard h2{font-size:24px;margin:0 0 6px}.gcard p{color:var(--mut);margin:0;font-size:17px;line-height:1.5;min-height:5.2em}
+.gdots{display:flex;gap:6px;margin:14px 0}.gdots span{height:6px;flex:1;border-radius:3px;background:var(--line)}.gdots span.on{background:var(--gold)}
+.gacts{display:flex;justify-content:space-between;gap:8px}
+.ga-p{transform-box:fill-box;transform-origin:center;animation:gap 1.8s ease-in-out infinite}@keyframes gap{50%{transform:scale(1.4);opacity:.7}}
+.ga-tap{animation:gat 2.6s ease-in-out infinite}@keyframes gat{0%,15%{transform:translate(70px,50px)}55%,100%{transform:translate(0,0)}}
+.ga-pop{transform-box:fill-box;transform-origin:bottom left;animation:gpo 2.6s ease-in-out infinite}@keyframes gpo{0%,55%{transform:scale(0);opacity:0}70%,100%{transform:scale(1);opacity:1}}
+.ga-drop{animation:gdr 2.4s cubic-bezier(.3,1.5,.6,1) infinite}@keyframes gdr{0%{transform:translateY(-60px);opacity:0}35%,100%{transform:translateY(0);opacity:1}}
+.ga-off{animation:gof 4s steps(1) infinite}@keyframes gof{0%{opacity:1}50%{opacity:0}}
+.ga-on{animation:gon 4s steps(1) infinite}@keyframes gon{0%{opacity:0}50%{opacity:1}}
+.ga-fly{animation:gfl 4s ease-in-out infinite}@keyframes gfl{0%,50%{transform:translate(0,0);opacity:1}80%{transform:translate(120px,-30px);opacity:0}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.guide *{animation:none!important}}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
@@ -137,6 +167,7 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
     <span class="legend"><span class="grad">Menos riesgo <b></b> Más riesgo</span><span><i class="ring"></i>Confirmada en imagen</span><span>Tamaño = área</span><span>◆ Pedido de la comunidad</span></span></figcaption>
   </figure>
   <div class="side">
+   <button type="button" class="gbtn" id="gopen"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#0d5c63"/><path d="M16 13.5v13l10.5-6.5z" fill="#fff"/></svg><span><b>¿Primera vez? Mirá cómo se usa</b><span>Cinco pasos cortos, menos de un minuto.</span></span></button>
    <section class="how" aria-label="Cómo funciona">
     <div class="head"><div><h2 id="howt">Seguí un caso real de principio a fin</h2><p class="now" id="hown">Seis pasos: del satélite a la decisión.</p></div><button id="go">Empezar</button></div>
     <div class="bars" id="rail" aria-hidden="true"></div>
@@ -197,7 +228,7 @@ function vsh(s){const exp=s.exp===true;
  const con=s.distRio<=CFG.rioM||s.drena===true||exp;
  const o=s.comunidad?'Pedido de la comunidad':'Sospecha minera';
  return s.sospecha&&con?[2,true,s.distRio<=CFG.rioM?`${o} a unos ${s.distRio} m del río`:exp?`${o}; la gente usa esa agua o pesca ahí`:`${o}; el drenaje corre hacia el río`]:[1,true,'Sin vía de exposición documentada']}
-function vs(s){const n=s.nbi;if(n==null)return[null,'Municipio sin dato de NBI'];return[n>60?3:n>=40?2:1,`NBI ${String(n).replace('.',',')} % en ${s.mun}`]}
+function vs(s){const n=s.nbi;if(n==null)return[null,'Municipio sin dato de NBI'];return[n>60?3:n>=40?2:1,`En ${s.mun}, ${String(Math.round(n))} de cada 100 hogares tienen necesidades básicas sin cubrir (NBI ${String(n).replace('.',',')} %)`]}
 function ve(s){return s.apKm===0?[3,`Dentro de ${s.ap||'un área protegida'}`]:s.apKm<=CFG.apKm?[2,`A ${Math.round(s.apKm*1000)} m de ${s.ap||'un área protegida'}`]:[1,`A ${String(s.apKm.toFixed(1)).replace('.',',')} km del área protegida más cercana`]}
 function idx(s){const a=vsh(s),b=vs(s),c=ve(s);if(b[0]==null)return{p:-1,n:0,pre:true,a,b,c,lab:'Sin datos suficientes'};const p=Math.round((CFG.alfa*a[0]+CFG.beta*b[0]+(1-CFG.alfa-CFG.beta)*c[0])*100)/100;const n=Math.min(3,Math.floor(p+.5));return{p,n,pre:a[1],a,b,c,lab:['','Bajo','Medio','Alto'][n]+(a[1]?' (preliminar)':'')}}
 const rank=()=>S.sites.map(s=>({s,r:idx(s)})).sort((x,y)=>((VIS[x.s.id]||[])[0]==='falso')-((VIS[y.s.id]||[])[0]==='falso')||y.r.p-x.r.p||y.s.pob-x.s.pob||x.s.id.localeCompare(y.s.id));
@@ -218,6 +249,8 @@ const ICON={
  protege:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>',
  lab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg>'};
 const TABS=[['ranking','Prioridades'],['ficha','Sitio'],['protege','PROTEGE'],['lab','Autoridad']];
+const rioTxt=s=>s.distRio<=60?'pegada al río':s.distRio<1000?`a ${s.distRio} m del río`:`a ${(s.distRio/1000).toFixed(1).replace('.',',')} km del río`;
+const nivel=r=>r.p<0?'Sin datos':'Riesgo '+['','bajo','medio','alto'][r.n];
 const PLAIN={a:'Riesgo para la salud',b:'Vulnerabilidad de la comunidad',c:'Naturaleza cercana'};
 const RCOL=['#9fb6b0','#3f9a73','#e8a317','#d9382c'];
 const STOPS=[[1,[246,228,160]],[1.75,[236,170,40]],[2.35,[222,92,38]],[3,[160,22,18]]];
@@ -255,13 +288,16 @@ function drawRail(){const cur=S.step-1;
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
 function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2><p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}, de mayor a menor riesgo. Tocá uno para ver por qué.</p><div class="list">`+
- r.map((x,i)=>`<div class="row${x.s.id===S.sel?' sel':''}" data-id="${esc(x.s.id)}"><span class="n">${i+1}</span><span><b>${esc(x.s.id)}</b>, ${esc(x.s.mun)}<small>${visTag(x.s.id)}${x.s.comunidad?`Pedido de la comunidad${x.s.lugar?': '+esc(x.s.lugar):''}`:`${String(x.s.ha).replace('.',',')} ha · ${x.s.pob.toLocaleString('es-BO')} personas cerca`}</small></span><span><span class="dot" style="background:${sc(x.r.p)}"></span><span class="score">${fmt(x.r.p)}</span><span class="chip c${x.r.n}">${esc(x.r.lab)}</span></span></div>`).join('')+'</div>'}
+ r.map((x,i)=>{const s=x.s;return `<div class="row rk${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><span class="n">${i+1}</span><span><span class="rh"><b>${s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`}</b><span class="chip c${x.r.n}">${nivel(x.r)}</span></span><small>${s.comunidad?`Lo pidió la comunidad, ${rioTxt(s)}`:`${s.pob.toLocaleString('es-BO')} personas viven cerca, ${rioTxt(s)}`}</small><small class="rid">${visTag(s.id)}${x.r.pre?'Sin confirmar con laboratorio':'Confirmado con laboratorio'} · código ${esc(s.id)}</small></span></div>`}).join('')+'</div>'}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
- const bar=(t,val,m)=>`<div class="vul"><span class="t">${t}</span><b>${val??'–'}</b><span class="bar"><span style="width:${(val||0)/3*100}%"></span></span><small>${esc(m)}</small></div>`;
+ const bar=(t,val,m)=>`<div class="fac"><span class="t">${t}</span><span class="chip c${val||0}">${['Sin dato','Bajo','Medio','Alto'][val||0]}</span><small>${esc(m)}</small></div>`;
  const miss=[typeof s.hg!=='number'&&'análisis de laboratorio',s.estado==='candidato'&&'verificación en el lugar',s.estado==='solicitud'&&'visita técnica'].filter(Boolean);
- return `<h2>${esc(s.id)}: ${s.comunidad?'pedido de evaluación de la comunidad':'posible poza de relave'}</h2><p class="lead">${s.comunidad?`${esc(s.lugar||'Punto marcado en el mapa')}, ${esc(s.mun)}. A unos ${s.distRio.toLocaleString('es-BO')} m del río grande más cercano (aproximado).`:`${esc(s.mun)}. ${String(s.ha).replace('.',',')} hectáreas, a ${s.distRio} m del río. ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km.`}</p>
- <div class="box"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><span class="big"><span class="dot" style="background:${sc(r.p)};width:22px;height:22px;vertical-align:8px"></span>${fmt(r.p)}</span><span><span class="chip c${r.n}">${esc(r.lab)}</span><br><small style="color:var(--mut)">Puesto ${pos} de ${S.sites.length}, en una escala de 1 a 3</small></span></div>
+ return `<h2>${s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`}</h2><p class="lead">${s.comunidad?`La comunidad pidió evaluar este lugar de ${esc(s.mun)}. Está a unos ${s.distRio.toLocaleString('es-BO')} m del río grande más cercano (aproximado).`:`Posible poza de relave minero de ${String(s.ha).replace('.',',')} hectáreas, ${rioTxt(s)}. Unas ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km.`} <span style="font-size:14px">Código ${esc(s.id)}.</span></p>
+ <div class="box"><div class="verdict"><span class="vw c${r.n}t">${nivel(r)}</span><span class="vp">Prioridad ${pos} de ${S.sites.length}</span></div>
+ ${r.p<0?'':`<div class="meter" role="img" aria-label="Puntaje ${fmt(r.p)} en una escala de 1 a 3"><span class="mk" style="left:${Math.max(0,Math.min(100,(r.p-1)/2*100))}%"></span></div><div class="ml"><span>Bajo</span><span>Medio</span><span>Alto</span></div>`}
+ <small style="color:var(--mut);display:block;margin-top:8px">${r.pre?'Es una sospecha: falta confirmarlo con laboratorio.':'Confirmado con análisis de laboratorio.'} Puntaje ${fmt(r.p)} de 3.</small>
+ <h3 class="why">¿Por qué?</h3>
  ${bar(PLAIN.a,r.a[0],r.a[2])}${bar(PLAIN.b,r.b[0],r.b[1])}${bar(PLAIN.c,r.c[0],r.c[1])}</div>
  ${s.comunidad?solBox(s):''}${v?`<div class="box"><b>Mirada en imagen de alta resolución:</b> ${visTag(s.id)}${esc(v[1])}</div>`:''}
  ${r.pre?`<div class="warn"><b>Todavía es una sospecha.</b> ${s.comunidad?'La comunidad avisó de un posible problema.':'El satélite no ve el mercurio: muestra lugares que parecen relaves.'} Solo un análisis de laboratorio confirma si hay mercurio.</div>`:''}
@@ -392,6 +428,30 @@ function render(){drawRail();drawMap();
   document.getElementById('lv').oninput=()=>{document.getElementById('lerr').textContent=''}}
  save()}
 
+// Guía animada de uso (funciona sin internet)
+const GMAP=`<rect width="320" height="200" fill="#0b3b33"/><path d="M0 60 Q60 40 110 70 T210 90 T320 70 V0 H0Z" fill="#0f4a3f"/><path d="M-10 150 C60 120 90 160 150 130 S250 100 330 125" fill="none" stroke="#5fb3c9" stroke-width="7" stroke-linecap="round" opacity=".85"/>`;
+const GUIA_P=[
+ {t:'Mirá el mapa',p:'Cada punto es un lugar que el satélite marcó como posible poza de relave minero. El color dice el riesgo: amarillo es poco, rojo es mucho.',
+  i:`${GMAP}<circle class="ga-p" cx="70" cy="128" r="9" fill="rgb(246,228,160)" stroke="#fff" stroke-width="2"/><circle class="ga-p" style="animation-delay:.4s" cx="150" cy="118" r="11" fill="rgb(236,170,40)" stroke="#fff" stroke-width="2"/><circle class="ga-p" style="animation-delay:.8s" cx="238" cy="104" r="13" fill="rgb(200,40,24)" stroke="#fff" stroke-width="2"/><g font-size="13" font-weight="700" fill="#fff"><text x="52" y="158">Poco</text><text x="214" y="138">Mucho</text></g>`},
+ {t:'Tocá un punto',p:'La app te explica en palabras por qué ese lugar es riesgoso: para la salud de la gente, para la comunidad y para la naturaleza cercana.',
+  i:`${GMAP}<circle cx="150" cy="118" r="11" fill="rgb(236,170,40)" stroke="#fff" stroke-width="2"/><circle cx="238" cy="104" r="13" fill="rgb(200,40,24)" stroke="#fff" stroke-width="3"/><g class="ga-pop"><rect x="150" y="30" width="150" height="58" rx="10" fill="#fff"/><text x="162" y="56" font-size="17" font-weight="800" fill="#c62a1e">Riesgo alto</text><text x="162" y="76" font-size="12" fill="#34433f">Agua que usa la gente</text></g><g class="ga-tap"><circle cx="246" cy="112" r="15" fill="#fff" opacity=".35"/><circle cx="246" cy="112" r="8" fill="#fff"/></g>`},
+ {t:'Mirá qué atender primero',p:'En Prioridades está la lista ordenada: arriba van los lugares donde conviene actuar primero.',
+  i:`<rect width="320" height="200" fill="#0b3b33"/>${[['1','Poza en Tacacoma','Alto','#d9382c','#fff'],['2','Poza en Teoponte','Medio','#e8a317','#2a1a00'],['3','Poza en Guanay','Bajo','#3f9a73','#fff']].map(([n,t,c,b,f],k)=>`<g class="ga-drop" style="animation-delay:${k*.25}s"><rect x="24" y="${26+k*54}" width="272" height="44" rx="10" fill="#123f38"/><text x="40" y="${54+k*54}" font-size="18" font-weight="800" fill="#9fb6b0">${n}</text><text x="64" y="${54+k*54}" font-size="15" font-weight="700" fill="#fff">${t}</text><rect x="${c==='Medio'?214:224}" y="${36+k*54}" width="${c==='Medio'?66:56}" height="24" rx="12" fill="${b}"/><text x="${c==='Medio'?247:252}" y="${53+k*54}" font-size="13" font-weight="700" fill="${f}" text-anchor="middle">${c}</text></g>`).join('')}`},
+ {t:'Tu palabra cuenta',p:'Si vivís cerca, en PROTEGE podés avisar lo que ves o pedir que evalúen el río de tu zona, marcando el lugar en el mapa. No pedimos tu nombre.',
+  i:`${GMAP}<g class="ga-drop"><path d="M160 112C150 98 146 92 146 85a14 14 0 0 1 28 0c0 7-4 13-14 27z" fill="#d9382c" stroke="#fff" stroke-width="2.5"/><circle cx="160" cy="85" r="5" fill="#fff"/></g><ellipse cx="160" cy="114" rx="12" ry="4" fill="#000" opacity=".3"/><g class="ga-pop" style="animation-delay:.3s"><rect x="186" y="34" width="118" height="40" rx="10" fill="#fff"/><text x="198" y="59" font-size="14" font-weight="700" fill="#0d5c63">¡Evalúen acá!</text></g>`},
+ {t:'¿Sin señal? No pasa nada',p:'Tu pedido se guarda en el teléfono y se envía solo cuando vuelve la conexión. Después podés ver en qué estado está.',
+  i:`<rect width="320" height="200" fill="#0b3b33"/><rect x="52" y="30" width="86" height="148" rx="14" fill="#123f38" stroke="#9fb6b0" stroke-width="3"/><rect x="66" y="58" width="58" height="34" rx="6" fill="#e8b75c" class="ga-fly"/><g class="ga-off"><path d="M196 92a40 40 0 0 1 64 0M208 106a24 24 0 0 1 40 0" fill="none" stroke="#9fb6b0" stroke-width="7" stroke-linecap="round"/><path d="M200 70l60 60" stroke="#e8b75c" stroke-width="7" stroke-linecap="round"/><text x="228" y="160" font-size="14" font-weight="700" fill="#e6f3ef" text-anchor="middle">Guardado</text></g><g class="ga-on"><path d="M196 92a40 40 0 0 1 64 0M208 106a24 24 0 0 1 40 0" fill="none" stroke="#7be3a8" stroke-width="7" stroke-linecap="round"/><circle cx="228" cy="120" r="6" fill="#7be3a8"/><text x="228" y="160" font-size="14" font-weight="700" fill="#7be3a8" text-anchor="middle">¡Enviado!</text></g>`}];
+let GI=0,GPREV=null;
+function guiaShow(){const el=document.getElementById('guia');if(!el)return;const g=GUIA_P[GI],last=GI===GUIA_P.length-1;
+ el.innerHTML=`<div class="gcard" role="dialog" aria-modal="true" aria-labelledby="gt"><div class="gill"><svg viewBox="0 0 320 200" aria-hidden="true">${g.i}</svg></div><h2 id="gt">${g.t}</h2><p>${g.p}</p><div class="gdots" aria-hidden="true">${GUIA_P.map((_,k)=>`<span class="${k<=GI?'on':''}"></span>`).join('')}</div><div class="gacts"><button type="button" class="ghost" id="gskip">${GI?'Atrás':'Saltar'}</button><button type="button" id="gnext">${last?'Empezar a usarla':'Siguiente'}</button></div><p class="sr" aria-live="polite" style="position:absolute;left:-9999px">Paso ${GI+1} de ${GUIA_P.length}</p></div>`;
+ document.getElementById('gnext').onclick=()=>{if(last)guiaClose();else{GI++;guiaShow()}};
+ document.getElementById('gskip').onclick=()=>{if(GI){GI--;guiaShow()}else guiaClose()};
+ document.getElementById('gnext').focus()}
+function guiaOpen(){GPREV=document.activeElement;GI=0;let el=document.getElementById('guia');if(!el){el=document.createElement('div');el.id='guia';el.className='guide';document.body.appendChild(el);
+ el.onclick=e=>{if(e.target===el)guiaClose()};el.onkeydown=e=>{if(e.key==='Escape')guiaClose();if(e.key==='Tab'){const f=[...el.querySelectorAll('button')];const i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?f.length-1:1))%f.length].focus()}}}
+ el.hidden=false;document.body.style.overflow='hidden';guiaShow();S.guia=true;save()}
+function guiaClose(){const el=document.getElementById('guia');if(el)el.hidden=true;document.body.style.overflow='';if(GPREV)GPREV.focus()}
+document.getElementById('gopen').onclick=guiaOpen;
 const net=()=>{const n=document.getElementById('net');n.textContent=online()?'Conectado':S.sinSenal?'Sin señal (simulado): se guarda en el teléfono':'Sin señal: se guarda en el teléfono';n.classList.toggle('off',!online())};
 addEventListener('online',()=>{net();sync()});addEventListener('offline',net);net();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
