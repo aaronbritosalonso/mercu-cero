@@ -173,6 +173,22 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .herr ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
 .herr li{background:var(--card);border-radius:18px;padding:16px 18px;box-shadow:0 1px 2px #13302a0d,0 10px 30px -18px #1f56413d}
 .herr li b{display:block;font-family:Manrope;font-size:18px;margin-bottom:4px;color:var(--forest)}.herr li span{color:var(--ink);font-size:15.5px;line-height:1.5}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.mfab{position:fixed;right:18px;bottom:22px;z-index:30;border-radius:99px;min-height:54px;padding:0 18px 0 8px;box-shadow:0 10px 30px -8px #1f564180;gap:10px}
+.mav{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#e8b75c;color:#221300;font-family:Manrope;font-weight:800;font-size:14px;flex:none}
+.mchat{position:fixed;right:18px;bottom:22px;z-index:40;width:min(400px,calc(100vw - 24px));height:min(600px,calc(100dvh - 110px));display:flex;flex-direction:column;background:var(--card);border-radius:22px;box-shadow:0 24px 70px -10px #13302a66;overflow:hidden}
+.mchat[hidden]{display:none}
+.mhead{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 14px;background:var(--forest);color:#fff}.mhead b{display:block;font-family:Manrope;font-size:18px}.mhead small{display:block;font-size:13px;opacity:.85}
+.mhead span:nth-child(2){flex:1}.mhead .mx{min-height:40px;width:40px;padding:0;justify-content:center;font-size:24px;background:transparent;color:#fff;border-color:#ffffff66}.mhead .mx:hover{background:#ffffff22}
+.mlog{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.mm{max-width:88%;padding:10px 13px;border-radius:16px;font-size:15.5px;line-height:1.5}
+.mm.bot{background:var(--card);border-bottom-left-radius:6px;align-self:flex-start;box-shadow:0 1px 2px #13302a14}
+.mm.yo{background:var(--forest);color:#fff;border-bottom-right-radius:6px;align-self:flex-end}
+.mm p{margin:0}.mm p+p,.mm ul{margin-top:6px}.mm ul{padding-left:18px;margin-bottom:0}.mm a{color:var(--forest)}
+.mops{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.mops button{min-height:38px;font-size:14px;padding:0 12px;border-radius:99px}
+.mform{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}.mform input{flex:1}.mform button{min-height:46px}
+@media(max-width:900px){.mfab{bottom:84px;right:12px}.mfab span:last-child{display:none}.mfab{padding:0 8px}.mchat{right:8px;left:8px;width:auto;bottom:80px;height:calc(100dvh - 160px)}}
+@media(prefers-reduced-motion:no-preference){.mm{animation:in .2s ease-out}}
 .demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
@@ -294,6 +310,12 @@ details.tech[open]{padding-bottom:14px}
  <p class="disc">Sentinel-1 y Sentinel-2 se procesaron en Google Earth Engine en noviembre de 2026; los datos de Amazon Mining Watch son de octubre de 2026 (licencia CC BY 4.0).</p>
 </section>
 <div class="fine"><details class="acc"><summary><span><b>Datos y fuentes</b><small>De dónde sale cada dato y qué es simulado</small></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Datos reales: imagen y pozas de Sentinel-2 (mayo a septiembre de 2025) con JRC Global Surface Water; área protegida (WDPA); municipios (geoBoundaries); NBI del Censo 2024 (INE y UDAPE); población en 5 km (WorldPop 2020); revisión de las 10 primeras pozas con imágenes de Google Maps; agua en radar con Sentinel-1 (temporada seca 2025) y pérdida de vegetación con Sentinel-2 (2019 frente a 2025), ambos calculados en Google Earth Engine; zonas mineras de <a href="https://www.earthgenome.org/work/amazon-mining-watch">Amazon Mining Watch</a> (Earth Genome, licencia CC BY 4.0, datos de octubre de 2026). Simulado: reportes PROTEGE y resultados de laboratorio. El valor de referencia de mercurio (1 mg/kg) es de demostración hasta que lo defina el equipo.</p></details></div>
+<button type="button" class="mfab" id="mopen" aria-haspopup="dialog"><span class="mav" aria-hidden="true">Hg</span><span>Preguntale a Mercu</span></button>
+<div class="mchat" id="mchat" role="dialog" aria-modal="false" aria-labelledby="mtit" hidden>
+ <div class="mhead"><span class="mav" aria-hidden="true">Hg</span><span><b id="mtit">Mercu</b><small>Asistente de MERCU-CERO · funciona sin internet</small></span><button type="button" class="ghost mx" id="mclose" aria-label="Cerrar a Mercu">×</button></div>
+ <div class="mlog" id="mlog" aria-live="polite"></div>
+ <form class="mform" id="mform"><label for="min" class="sr">Escribí tu pregunta</label><input id="min" type="text" maxlength="160" placeholder="Escribí tu pregunta" autocomplete="off"><button type="submit" aria-label="Enviar pregunta">Enviar</button></form>
+</div>
 <nav class="navb" id="navb" aria-label="Secciones"></nav>
 <script>
 {
@@ -602,6 +624,53 @@ function guiaOpen(){GPREV=document.activeElement;GI=0;let el=document.getElement
  el.hidden=false;document.body.style.overflow='hidden';guiaShow();S.guia=true;save()}
 function guiaClose(){const el=document.getElementById('guia');if(el)el.hidden=true;document.body.style.overflow='';if(GPREV)GPREV.focus()}
 document.getElementById('gopen').onclick=guiaOpen;
+// ===== Mercu: asistente de la app (reglas + datos de la app; no usa internet ni inventa) =====
+const nrm=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9ñ\- ]/g,' ');
+const has=(q,...ws)=>ws.some(w=>q.includes(w));
+const SUG=['¿Qué lugar es el más urgente?','¿Qué es un relave?','¿Es peligroso comer pescado?','¿Cómo pido ayuda?','¿Cómo va mi pedido?'];
+function mResp(raw){const q=' '+nrm(raw)+' ';const R=[];const rk=rank();
+ const cod=raw.toUpperCase().match(/S2-?\s?(\d{1,2})/)||raw.toUpperCase().match(/\bC-?(\d{1,2})\b/);
+ const mun=[...new Set(S.sites.map(x=>x.mun))].find(m=>q.includes(nrm(m)));
+ if(cod){const id=(raw.toUpperCase().includes('C')&&!/S2/.test(raw.toUpperCase())?'C-':'S2-')+cod[1].padStart(2,'0');const x=S.sites.find(z=>z.id===id);
+  if(!x)return{t:[`No encuentro el lugar ${id}. Los códigos van de S2-01 a S2-40.`],o:[['Ver la lista','go:ranking']]};
+  const r=idx(x),pos=rk.findIndex(z=>z.s.id===id)+1;
+  return{t:[`<b>${titulo(x)}</b> (${id}): ${nivel(r).toLowerCase()}, prioridad ${pos} de ${rk.length}.`,`${esc(r.a[2])}. ${esc(r.b[1])}.`,`Lo recomendado: ${esc(accion(x,r)[1].toLowerCase())}`],o:[['Abrir su ficha','site:'+id]]}}
+ if(has(q,' hola',' buenas',' buen dia',' que tal')&&q.trim().split(' ').length<5)return{t:['¡Hola! Soy Mercu. Te ayudo a usar MERCU-CERO y a entender el problema del mercurio en los ríos. ¿Qué querés saber?'],o:SUG.slice(0,4).map(x=>[x,'q:'+x])};
+ if(has(q,'urgente','primero','prioridad','peor','mas riesgo','mayor riesgo','top')){const t=rk.slice(0,3);
+  return{t:['Los tres lugares que conviene atender primero son:',`<ul>${t.map((z,i)=>`<li>${i+1}. ${titulo(z.s)} (${z.s.id}): ${nivel(z.r).toLowerCase()}</li>`).join('')}</ul>`,'El orden combina la salud de la gente, cuán vulnerable es la comunidad y la naturaleza cercana.'],o:t.map(z=>[`Ver ${z.s.id}`,'site:'+z.s.id]).concat([['Ver la lista completa','go:ranking']])}}
+ if(mun){const l=rk.filter(z=>z.s.mun===mun);return{t:[`En ${mun} hay ${l.length} ${l.length===1?'lugar':'lugares'} en el mapa.`,l.length?`El más urgente es ${titulo(l[0].s)} (${l[0].s.id}), prioridad ${rk.indexOf(l[0])+1} de ${rk.length}: ${nivel(l[0].r).toLowerCase()}.`:''].filter(Boolean),o:l.slice(0,3).map(z=>[`Ver ${z.s.id}`,'site:'+z.s.id])}}
+ if(has(q,'pedido','solicitud','mi reporte','mis reportes','sol-','estado de')){const l=S.solicitudes;
+  if(!l.length)return{t:['Todavía no enviaste ningún pedido desde este teléfono.','Si te preocupa un río o un lugar, podés pedir que lo evalúen. No hace falta dar tu nombre ni tener señal.'],o:[['Pedir una evaluación','sol:']]};
+  return{t:l.slice(-3).reverse().map(x=>{const n=x.paso||(x.enviado?2:1);return `<b>${esc(x.id)}</b>, ${esc(x.lugar||x.mun)}: ${['','guardado en el teléfono, esperando señal','enviado a la autoridad','en revisión','visita o muestreo programado','con resultado'][n]}.`}),o:[['Ver mis pedidos','sol:']]}}
+ if(has(q,'como pido','pedir ayuda','ayuda','denunciar','avisar','reportar','evaluen','evaluar mi','mi rio','mi comunidad'))return{t:['Podés hacerlo en la sección <b>Avisar</b>, de dos formas:','<ul><li><b>Reportar una poza</b>: si estás cerca de un lugar de la lista, contás lo que ves.</li><li><b>Pedir evaluación de mi zona</b>: marcás en el mapa un río o lugar que te preocupa y decís cómo llegar.</li></ul>','No pedimos tu nombre y se guarda aunque no haya señal. Por tu seguridad, no toques el material ni te acerques a donde se quema amalgama.'],o:[['Pedir una evaluación','sol:'],['Reportar una poza','rep:']]};
+ if(has(q,'senal','internet','offline','sin conexion','wifi','datos moviles'))return{t:['La app funciona sin internet: el mapa, la lista y yo estamos guardados en el teléfono.','Si enviás un pedido sin señal, queda guardado y se manda solo cuando vuelve la conexión.']};
+ if(has(q,'pescado','pez','peces','comer','tomar agua','beber','embaraz','bebe','nino','salud','peligro','sintoma','enferm','mal ','dano'))return{t:['El mercurio que se usa para separar el oro llega a los ríos. Ahí se transforma en metilmercurio, que se acumula en los peces, sobre todo en los grandes que comen otros peces. Comer pescado así es la forma principal en que llega a las personas.','Los más sensibles son los bebés en la panza, los niños pequeños y las embarazadas.','Respirar el humo de la quema de amalgama también es muy dañino: puede causar temblores, problemas de memoria, dolor de cabeza y daño a los riñones.','<b>No soy médico.</b> Si te preocupa tu salud o la de tu familia, consultá en el centro de salud más cercano.','Fuente: <a href="https://www.who.int/news-room/fact-sheets/detail/mercury-and-health" target="_blank" rel="noopener">Organización Mundial de la Salud</a>.']};
+ if(has(q,'amalgama','quema','humo','vapor'))return{t:['La amalgama es la mezcla de mercurio y oro. Al quemarla, el mercurio se vuelve vapor y se respira: es de lo más peligroso.','No te acerques a donde se quema amalgama y no toques el material.']};
+ if(has(q,'relave','cola','pasivo','poza'))return{t:['Un <b>relave</b> es el barro y el agua que sobran al lavar la tierra para sacar el oro. Se juntan en pozas cerca de los ríos.','Si en ese proceso se usó mercurio, el relave puede llevarlo al río cuando llueve o se rebalsa.'],o:[['Ver los lugares detectados','go:ranking']]};
+ if(has(q,'mercurio',' hg '))return{t:['El mercurio es un metal líquido que en la minería de oro se usa para juntar las partículas de oro.','El problema es que sobra y llega al aire, al suelo y a los ríos. Un estudio del gobierno citado por Mongabay estima que la mayor parte del mercurio que libera Bolivia viene de la minería de oro.']};
+ if(has(q,'nbi','necesidades basicas','pobreza','vulnerab'))return{t:['Mide cuántos hogares de un municipio no tienen cubiertas sus necesidades básicas, como agua, vivienda o salud. Sale del Censo 2024.','Una comunidad con más necesidades tiene menos recursos para protegerse, por eso suma prioridad.']};
+ if(has(q,'sentinel','satelite','radar','amazon mining','amw','fuente','datos','de donde'))return{t:['Usamos tres fuentes públicas:','<ul><li><b>Sentinel-2</b>: fotos desde el espacio para encontrar las pozas y ver dónde desapareció el monte.</li><li><b>Sentinel-1</b>: un radar que ve aunque haya nubes; lo usamos para ver agua quieta.</li><li><b>Amazon Mining Watch</b>: un mapa de minería hecho con inteligencia artificial; 27 de nuestras 40 pozas están en zonas que ya marcaba.</li></ul>','Ninguna ve el mercurio: eso solo lo dice un análisis de laboratorio.']};
+ if(has(q,'riesgo','nivel','alto','medio','bajo','puntaje','indice','cepal','como se calcula'))return{t:['El nivel de riesgo dice <b>qué tan urgente es investigar</b> un lugar, no si hay mercurio.','Se calcula con un método de la CEPAL que suma tres cosas: la salud de la gente (la que más pesa), cuán vulnerable es la comunidad y la naturaleza cercana.','<ul><li><b>Bajo</b>: seguimiento con satélite.</li><li><b>Medio</b>: evaluar una visita.</li><li><b>Alto</b>: inspección prioritaria.</li></ul>']};
+ if(has(q,'laboratorio','analisis','muestra','confirmar'))return{t:['Solo un análisis de laboratorio confirma si hay mercurio. Se toma una muestra del sedimento, del agua o del pescado y se mide.','En esta versión de demostración, los resultados de laboratorio son simulados.'],o:[['Ver la sección Autoridad','go:lab']]};
+ if(has(q,'autoridad','estado','gobierno','quien recibe','municipio responde'))return{t:['Los pedidos llegan a la autoridad competente del Estado, que es quien debe evaluar y remediar.','En esta demostración, la sección <b>Autoridad</b> muestra cómo los recibiría y les cambiaría el estado.'],o:[['Ver la sección Autoridad','go:lab']]};
+ if(has(q,'como se usa','como funciona','que hace','para que sirve','que es esta','app','aplicacion','mercu-cero','mercu cero'))return{t:['MERCU-CERO ayuda a decidir qué lugares con relaves mineros conviene investigar primero en el norte de La Paz.','Tiene cuatro secciones: <b>Prioridades</b> (la lista), <b>Ficha</b> (por qué cada lugar importa), <b>Avisar</b> (para la comunidad) y <b>Autoridad</b> (la respuesta del Estado, en demostración).'],o:[['Ver la guía en 5 pasos','guia:'],['Ver la lista','go:ranking']]};
+ if(has(q,'gracias','genial','perfecto','buenisimo'))return{t:['¡De nada! Si necesitás algo más, acá estoy.']};
+ return{t:['Eso no lo sé. Me enfoco en MERCU-CERO y en el mercurio en los ríos del norte de La Paz, y solo respondo con la información que tiene la app.','Probá con alguna de estas preguntas:'],o:SUG.map(x=>[x,'q:'+x])}}
+function mPush(who,html,ops){const log=document.getElementById('mlog');const d=document.createElement('div');d.className='mm '+who;
+ d.innerHTML=(Array.isArray(html)?html:[html]).map(x=>x.startsWith('<ul')?x:`<p>${x}</p>`).join('')+(ops&&ops.length?`<div class="mops">${ops.map(([l,a])=>`<button type="button" class="ghost" data-a="${esc(a)}">${esc(l)}</button>`).join('')}</div>`:'');
+ log.appendChild(d);d.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>mAct(b.dataset.a));log.scrollTop=log.scrollHeight}
+function mAsk(t){t=t.trim();if(!t)return;mPush('yo',esc(t));const r=mResp(t);setTimeout(()=>mPush('bot',r.t,r.o),250)}
+function mAct(a){const[k,v]=[a.slice(0,a.indexOf(':')),a.slice(a.indexOf(':')+1)];
+ if(k==='q')return mAsk(v);
+ const small=matchMedia('(max-width:900px)').matches;if(small)mClose();
+ if(k==='site'){S.sel=v;goView('ficha')}else if(k==='go')goView(v);else if(k==='sol'){S.pmode='solicitud';goView('protege')}else if(k==='rep'){S.pmode='reporte';goView('protege')}else if(k==='guia'){mClose();guiaOpen()}}
+function mOpen(){const c=document.getElementById('mchat');c.hidden=false;document.getElementById('mopen').hidden=true;
+ if(!document.getElementById('mlog').childElementCount)mPush('bot',['¡Hola! Soy <b>Mercu</b>, el asistente de MERCU-CERO.','Te ayudo a usar la app y a entender el problema del mercurio en los ríos. Respondo con la información de la app, sin internet. ¿Qué querés saber?'],SUG.map(x=>[x,'q:'+x]));
+ document.getElementById('min').focus()}
+function mClose(){document.getElementById('mchat').hidden=true;const b=document.getElementById('mopen');b.hidden=false;b.focus()}
+document.getElementById('mopen').onclick=mOpen;document.getElementById('mclose').onclick=mClose;
+document.getElementById('mchat').onkeydown=e=>{if(e.key==='Escape')mClose()};
+document.getElementById('mform').onsubmit=e=>{e.preventDefault();const i=document.getElementById('min');mAsk(i.value);i.value=''};
 document.addEventListener('toggle',e=>{const d=e.target;if(d.tagName==='DETAILS'&&d.open&&d.classList.contains('acc')){const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>d.scrollIntoView({behavior:rm?'auto':'smooth',block:'nearest'}),60)}},true);
 const net=()=>{const n=document.getElementById('net');n.textContent=online()?'Conectado':S.sinSenal?'Sin señal (simulado): se guarda en el teléfono':'Sin señal: se guarda en el teléfono';n.classList.toggle('off',!online())};
 addEventListener('online',()=>{net();sync()});addEventListener('offline',net);net();
