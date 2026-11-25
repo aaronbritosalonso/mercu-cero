@@ -439,7 +439,7 @@ const solDe=s=>S.solicitudes.find(x=>x.sitio===s.id);
 const SEGUI=['Guardada en el teléfono','Enviada a la autoridad','En revisión','Visita o muestreo','Resultado'];
 const radios=(n,arr,def)=>`<div class="opts" role="radiogroup">${arr.map(v=>`<label><input type="radio" name="${n}" value="${v}"${v===def?' checked':''}>${v}</label>`).join('')}</div>`;
 function solBox(s){const q=S.solicitudes.find(x=>x.sitio===s.id);if(!q)return'';
- return `<div class="box"><b>Lo que pidió la comunidad:</b> ${esc(q.pide)}.<br>Le preocupa: ${esc(q.preo.join(', ').toLowerCase())}.<br>Familias que usan esa agua o pescan ahí: ${esc(q.fam)}. Lo nota desde hace: ${esc(q.desde.toLowerCase())}.${q.queb?`<br>¿Quebrada cerca que baja al río? ${esc(q.queb)}.`:''}${q.desc?`<br>“${esc(q.desc)}”`:''}<div class="steps">${segui(q)}</div></div>`}
+ return `<div class="box"><b>Lo que pidió la comunidad:</b> ${esc(q.pide)}.<br>Le preocupa: ${esc(q.preo.join(', ').toLowerCase())}.<br>Familias que usan esa agua o pescan ahí: ${esc(q.fam)}. Lo nota desde hace: ${esc(q.desde.toLowerCase())}.${q.ref?`<br>Cómo llegar: ${esc(q.ref)}`:''}${q.queb?`<br>¿Quebrada cerca que baja al río? ${esc(q.queb)}.`:''}${q.desc?`<br>“${esc(q.desc)}”`:''}<div class="steps">${segui(q)}</div></div>`}
 function segui(q){const n=q.paso||(q.enviado?2:1);return SEGUI.map((t,i)=>`<span class="${i<n?'done':''}">${i<n?'✓ ':''}${t}</span>`).join('')}
 
 function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,'es'));
@@ -449,7 +449,8 @@ function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,
  <div class="pick"><svg id="pick" tabindex="0" aria-labelledby="l-pick" aria-describedby="pinfo"></svg><div class="zb"><button type="button" id="zin" aria-label="Acercar el mapa">+</button><button type="button" id="zout" aria-label="Alejar el mapa">−</button></div><span class="zl" id="zl"></span></div>
  <p id="pinfo" class="lead" style="font-size:15px;margin-top:8px" aria-live="polite"></p>
  <label for="smun">Municipio</label><select id="smun"><option value="">Elegí el municipio</option>${muns.map(m=>`<option>${esc(m)}</option>`).join('')}</select>
- <label for="slug">Nombre del lugar (opcional)</label><input id="slug" type="text" maxlength="80" placeholder="Comunidad, quebrada o río">
+ <label for="slug">Comunidad o zona</label><input id="slug" type="text" maxlength="80" placeholder="Por ejemplo: comunidad San Juan, sector Cangallí" autocomplete="off">
+ <label for="sref">¿Cómo se llega? Referencias del lugar</label><textarea id="sref" rows="2" maxlength="300" placeholder="Camino, calle, puente, nombre del río o la quebrada, una mina o un lugar conocido cerca"></textarea>
  <label>¿Qué te preocupa? Podés marcar varias</label><div class="opts">${PREO.map(v=>`<label><input type="checkbox" name="preo" value="${v}">${v}</label>`).join('')}</div>
  <label>¿Hay una quebrada o arroyo cerca que baja al río?</label>${radios('queb',['Sí','No','No sé'],'No sé')}
  <label>¿Qué pedís?</label>${radios('pide',PIDE,'Análisis del agua')}
@@ -486,11 +487,12 @@ function bindSolicitud(){const sf=document.getElementById('sf');if(!sf)return;co
  sf.onsubmit=e=>{e.preventDefault();const er=document.getElementById('serr');const preo=[...sf.querySelectorAll('input[name=preo]:checked')].map(i=>i.value);const mun=document.getElementById('smun').value;
   if(PK.lon==null){er.textContent='Falta marcar el lugar en el mapa.';document.getElementById('pick').focus();return}
   if(!mun){er.textContent='Falta elegir el municipio.';document.getElementById('smun').focus();return}
+  if(!document.getElementById('slug').value.trim()){er.textContent='Falta el nombre de la comunidad o zona.';document.getElementById('slug').focus();return}
   if(!preo.length){er.textContent='Marcá al menos una cosa que te preocupa.';return}
   const val=n=>sf.querySelector(`input[name=${n}]:checked`).value,L=lugar(PK.lon,PK.lat),n=S.solicitudes.length+1;
   const id='C-'+String(n).padStart(2,'0'),sid='SOL-'+String(n).padStart(3,'0'),lug=document.getElementById('slug').value.trim();
   S.sites.push({id,mun,nbi:NBI[mun]??null,ha:null,pob:null,distRio:L.rio,apKm:L.apKm,ap:L.apKm<=CFG.apKm*5?'Apolobamba':null,lon:+PK.lon.toFixed(5),lat:+PK.lat.toFixed(5),estado:'solicitud',sospecha:true,comunidad:true,lugar:lug,drena:val('queb')==='Sí',exp:preo.includes('Agua para tomar')||preo.includes('Pesca')});
-  S.solicitudes.push({id:sid,sitio:id,mun,lugar:lug,preo,pide:val('pide'),queb:val('queb'),fam:val('fam'),desde:val('desde'),desc:document.getElementById('sdesc').value.trim(),fecha:new Date().toLocaleString('es-BO'),enviado:false});
+  S.solicitudes.push({id:sid,sitio:id,mun,lugar:lug,preo,pide:val('pide'),queb:val('queb'),fam:val('fam'),desde:val('desde'),ref:document.getElementById('sref').value.trim(),desc:document.getElementById('sdesc').value.trim(),fecha:new Date().toLocaleString('es-BO'),enviado:false});
   PK.lon=PK.lat=null;PK.z=1;S.sel=id;save();
   FLASH={s:`Solicitud ${sid} guardada${online()?'':' en el teléfono; se enviará cuando haya señal'}. Tu punto ya está en el mapa como ${id} y entra en la lista de prioridades.`};render();setTimeout(sync,800)};
 }
@@ -501,7 +503,7 @@ function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||(s.estado==
   return n===2?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="3">Pasar a revisión</button>`:n===3?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="4">Programar visita o muestreo</button>`:n===4?'<small>Esperando el resultado de laboratorio (abajo).</small>':'<small>Resultado cargado y riesgo recalculado.</small>'};
  return `<h2>Autoridad competente <span class="tag">demo</span></h2><p class="lead">Así lo vería la entidad del Estado que recibe los pedidos de la comunidad y encarga los análisis. Todo en esta sección es simulado.</p>
  <h3 style="margin:18px 0 4px">Pedidos de la comunidad</h3>
- ${sols.length?sols.map(q=>`<div class="box"><b>${esc(q.id)}</b>, ${esc(q.lugar||'punto marcado')} (${esc(q.mun)}). Pide: ${esc(q.pide.toLowerCase())}. Familias: ${esc(q.fam)}.<div class="steps">${segui(q)}</div><div class="acts" style="align-items:center">${acc(q)}<button type="button" class="ghost" data-ver="${esc(q.sitio)}">Ver en el mapa</button></div></div>`).join(''):'<div class="box">Todavía no llegó ningún pedido. Probá enviar uno desde PROTEGE, en "Pedir evaluación de mi zona".</div>'}
+ ${sols.length?sols.map(q=>`<div class="box"><b>${esc(q.id)}</b>, ${esc(q.lugar||'punto marcado')} (${esc(q.mun)}). Pide: ${esc(q.pide.toLowerCase())}. Familias: ${esc(q.fam)}.${q.ref?`<br><small>Cómo llegar: ${esc(q.ref)}</small>`:''}<div class="steps">${segui(q)}</div><div class="acts" style="align-items:center">${acc(q)}<button type="button" class="ghost" data-ver="${esc(q.sitio)}">Ver en el mapa</button></div></div>`).join(''):'<div class="box">Todavía no llegó ningún pedido. Probá enviar uno desde PROTEGE, en "Pedir evaluación de mi zona".</div>'}
  <h3 style="margin:22px 0 4px">Cargar resultado de laboratorio</h3><p class="lead" style="font-size:15px">Cuando llega el análisis de una muestra, se carga acá y el riesgo se recalcula. El resultado es simulado.</p>
  ${pend.length?`<form id="lf"><label for="ls">Lugar con muestra tomada</label><select id="ls">${pend.map(s=>`<option value="${esc(s.id)}">${esc(s.id)}, ${esc(s.mun)}</option>`).join('')}</select>
  <label for="lv">Mercurio en sedimento (mg/kg)</label><input id="lv" type="number" step="0.01" min="0" value="3.2" inputmode="decimal">
