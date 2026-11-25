@@ -116,6 +116,7 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .pick .zb{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
 .pick .zb button{min-height:42px;width:42px;padding:0;justify-content:center;background:#04201ed9;color:#fff;border:1px solid #ffffff55;font-size:22px}
 .pick .zl{position:absolute;left:8px;bottom:8px;font-size:13px;color:#e6f3ef;background:#04201ecc;padding:3px 8px;border-radius:8px}
+.demo-sw{display:flex;align-items:center;gap:10px;font-size:15px;margin:4px 0 12px;cursor:pointer}.demo-sw input{width:22px;height:22px;accent-color:var(--teal)}
 .steps{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.steps span{font-size:13px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--mut)}
 .steps span.done{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent);font-weight:700}
 #view{scroll-margin-top:12px}
@@ -179,6 +180,7 @@ function lugar(lon,lat){RIOS=RIOS||DATA.rios.split(';').map(q=>q.split(',').map(
  return{rio:Math.round(rio*1000),apKm:+ap.toFixed(2),near:near.x,nearKm:near.d}}
 const PK={lon:null,lat:null,z:1,cx:0,cy:0};
 let FLASH={};
+const online=()=>navigator.onLine&&!S.sinSenal;
 const PUEBLOS=[['Guanay',-67.8833,-15.4976],['Tipuani',-68.0255,-15.5477],['Teoponte',-67.65,-15.35]];
 const B={w:-68.40,e:-67.60,n:-15.10,s:-15.80},MW=600,MH=Math.round(600*(B.n-B.s)/((B.e-B.w)*Math.cos(15.45*Math.PI/180)));
 const px=(lon,lat)=>[((lon-B.w)/(B.e-B.w)*MW).toFixed(1),((B.n-lat)/(B.n-B.s)*MH).toFixed(1)];
@@ -208,14 +210,14 @@ function next(){const c=site(GUIA);
  acts[S.step]();S.step++;save();render()}
 
 function saveReport(s,d){Object.assign(s,{exp:d.exp,drena:d.drena||s.drena,estado:'pendiente'});S.reports.push({id:'PR-'+String(S.reports.length+1).padStart(3,'0'),sitio:s.id,fecha:new Date().toLocaleString('es-BO'),enviado:false,...d});setTimeout(sync,800)}
-function sync(){if(!navigator.onLine)return;const p=[...S.reports,...S.solicitudes].filter(r=>!r.enviado);if(!p.length)return;setTimeout(()=>{p.forEach(r=>{r.enviado=true});save();if(S.view==='protege')render()},1200)}
+function sync(){if(!online())return;const p=[...S.reports,...S.solicitudes].filter(r=>!r.enviado);if(!p.length)return;setTimeout(()=>{p.forEach(r=>{r.enviado=true;if(r.sitio&&r.id.startsWith('SOL'))r.paso=Math.max(r.paso||0,2)});save();if(S.view==='protege'||S.view==='lab')render()},1200)}
 
 const ICON={
  ranking:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>',
  ficha:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
  protege:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>',
  lab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg>'};
-const TABS=[['ranking','Prioridades'],['ficha','Sitio'],['protege','PROTEGE'],['lab','Laboratorio']];
+const TABS=[['ranking','Prioridades'],['ficha','Sitio'],['protege','PROTEGE'],['lab','Autoridad']];
 const PLAIN={a:'Riesgo para la salud',b:'Vulnerabilidad de la comunidad',c:'Naturaleza cercana'};
 const RCOL=['#9fb6b0','#3f9a73','#e8a317','#d9382c'];
 const STOPS=[[1,[246,228,160]],[1.75,[236,170,40]],[2.35,[222,92,38]],[3,[160,22,18]]];
@@ -265,7 +267,7 @@ function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===
  ${r.pre?`<div class="warn"><b>Todavía es una sospecha.</b> ${s.comunidad?'La comunidad avisó de un posible problema.':'El satélite no ve el mercurio: muestra lugares que parecen relaves.'} Solo un análisis de laboratorio confirma si hay mercurio.</div>`:''}
  ${typeof s.hg==='number'?`<div class="box">Laboratorio (simulado): <b>${String(s.hg).replace('.',',')} mg/kg</b> de mercurio en sedimento. Referencia de demostración: ${CFG.refHg} mg/kg.</div>`:''}
  ${miss.length?`<p class="lead">Falta: ${miss.map(esc).join(' y ')}.</p>`:''}
- <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'||s.estado==='solicitud'?'<button id="toL">Cargar laboratorio</button>':''}<a class="btn blue" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>`}
+ <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'?'<button id="toL">Cargar laboratorio</button>':s.estado==='solicitud'?'<button id="toL">Ver en el panel de la autoridad</button>':''}<a class="btn blue" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>`}
 
 function vReporte(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>`<option value="${esc(s.id)}"${s.id===S.sel?' selected':''}>${esc(s.id)}, ${esc(s.mun)}, ${String(s.ha).replace('.',',')} ha</option>`).join('');
  const yn=(n,q)=>`<label>${q}</label><div class="opts">${['Sí','No','No sé'].map(v=>`<label><input type="radio" name="${n}" value="${v}" ${v==='No sé'?'checked':''}>${v}</label>`).join('')}</div>`;
@@ -281,15 +283,17 @@ function vProtege(){const md=S.pmode||'reporte';
  return `<h2>PROTEGE</h2><p class="lead">Tu palabra cuenta. Avisá lo que ves cerca de una poza o pedí que evalúen el río de tu zona. Todo se guarda en el teléfono aunque no haya señal.</p>
  <div class="seg" role="group" aria-label="Qué querés hacer"><button type="button" data-m="reporte" aria-pressed="${md==='reporte'}">Reportar una poza</button><button type="button" data-m="solicitud" aria-pressed="${md==='solicitud'}">Pedir evaluación de mi zona</button></div>
  <div class="warn"><b>Tu seguridad primero.</b> No toques el material ni te acerques a donde se quema amalgama. No pedimos tu nombre.</div>
+ <label class="demo-sw"><input type="checkbox" id="nosig"${S.sinSenal?' checked':''}> Simular que no hay señal <span class="tag">demo</span></label>
  ${md==='reporte'?vReporte():vSolicitud()}`}
 
 const PREO=['Agua para tomar','Pesca','Cultivos o animales','Poza o relave nuevo','Quema de amalgama','La gente se siente mal'];
 const PIDE=['Análisis del agua','Análisis del pescado','Visita técnica','Información'];
+const solDe=s=>S.solicitudes.find(x=>x.sitio===s.id);
 const SEGUI=['Guardada en el teléfono','Enviada a la autoridad','En revisión','Visita o muestreo','Resultado'];
 const radios=(n,arr,def)=>`<div class="opts" role="radiogroup">${arr.map(v=>`<label><input type="radio" name="${n}" value="${v}"${v===def?' checked':''}>${v}</label>`).join('')}</div>`;
 function solBox(s){const q=S.solicitudes.find(x=>x.sitio===s.id);if(!q)return'';
  return `<div class="box"><b>Lo que pidió la comunidad:</b> ${esc(q.pide)}.<br>Le preocupa: ${esc(q.preo.join(', ').toLowerCase())}.<br>Familias que usan esa agua o pescan ahí: ${esc(q.fam)}. Lo nota desde hace: ${esc(q.desde.toLowerCase())}.${q.queb?`<br>¿Quebrada cerca que baja al río? ${esc(q.queb)}.`:''}${q.desc?`<br>“${esc(q.desc)}”`:''}<div class="steps">${segui(q)}</div></div>`}
-function segui(q){const n=q.enviado?2:1;return SEGUI.map((t,i)=>`<span class="${i<n?'done':''}">${i<n?'✓ ':''}${t}</span>`).join('')}
+function segui(q){const n=q.paso||(q.enviado?2:1);return SEGUI.map((t,i)=>`<span class="${i<n?'done':''}">${i<n?'✓ ':''}${t}</span>`).join('')}
 
 function vSolicitud(){const muns=Object.keys(NBI).sort((a,b)=>a.localeCompare(b,'es'));
  return `<p class="lead">El satélite no ve todo. Si te preocupa un río, una quebrada o un lugar de tu comunidad, marcalo y pedí que lo evalúen. Tu pedido llega a la autoridad competente del Estado, que es quien debe evaluar y remediar, y además entra al mapa de prioridades.</p>
@@ -345,15 +349,21 @@ function bindSolicitud(){const sf=document.getElementById('sf');if(!sf)return;co
   S.sites.push({id,mun,nbi:NBI[mun]??null,ha:null,pob:null,distRio:L.rio,apKm:L.apKm,ap:L.apKm<=CFG.apKm*5?'Apolobamba':null,lon:+PK.lon.toFixed(5),lat:+PK.lat.toFixed(5),estado:'solicitud',sospecha:true,comunidad:true,lugar:lug,drena:val('queb')==='Sí',exp:preo.includes('Agua para tomar')||preo.includes('Pesca')});
   S.solicitudes.push({id:sid,sitio:id,mun,lugar:lug,preo,pide:val('pide'),queb:val('queb'),fam:val('fam'),desde:val('desde'),desc:document.getElementById('sdesc').value.trim(),fecha:new Date().toLocaleString('es-BO'),enviado:false});
   PK.lon=PK.lat=null;PK.z=1;S.sel=id;save();
-  FLASH={s:`Solicitud ${sid} guardada${navigator.onLine?'':' en el teléfono; se enviará cuando haya señal'}. Tu punto ya está en el mapa como ${id} y entra en la lista de prioridades.`};render();setTimeout(sync,800)};
+  FLASH={s:`Solicitud ${sid} guardada${online()?'':' en el teléfono; se enviará cuando haya señal'}. Tu punto ya está en el mapa como ${id} y entra en la lista de prioridades.`};render();setTimeout(sync,800)};
 }
 
-function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||s.estado==='solicitud');
- return `<h2>Laboratorio</h2><p class="lead">Cuando llega el análisis de una muestra, se carga acá y el riesgo se recalcula. En esta demo el resultado es simulado.</p>
+function vLab(){const pend=S.sites.filter(s=>s.estado==='pendiente'||(s.estado==='solicitud'&&(solDe(s)?.paso||0)>=4));
+ const sols=S.solicitudes.slice().reverse(),PASO=['','Recibida','Recibida','En revisión','Visita o muestreo programado','Con resultado'];
+ const acc=q=>{const n=q.paso||(q.enviado?2:1);if(!q.enviado)return '<small>Todavía está en el teléfono de la persona, esperando señal.</small>';
+  return n===2?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="3">Pasar a revisión</button>`:n===3?`<button type="button" class="ghost" data-sol="${esc(q.id)}" data-p="4">Programar visita o muestreo</button>`:n===4?'<small>Esperando el resultado de laboratorio (abajo).</small>':'<small>Resultado cargado y riesgo recalculado.</small>'};
+ return `<h2>Autoridad competente <span class="tag">demo</span></h2><p class="lead">Así lo vería la entidad del Estado que recibe los pedidos de la comunidad y encarga los análisis. Todo en esta sección es simulado.</p>
+ <h3 style="margin:18px 0 4px">Pedidos de la comunidad</h3>
+ ${sols.length?sols.map(q=>`<div class="box"><b>${esc(q.id)}</b>, ${esc(q.lugar||'punto marcado')} (${esc(q.mun)}). Pide: ${esc(q.pide.toLowerCase())}. Familias: ${esc(q.fam)}.<div class="steps">${segui(q)}</div><div class="acts" style="align-items:center">${acc(q)}<button type="button" class="ghost" data-ver="${esc(q.sitio)}">Ver en el mapa</button></div></div>`).join(''):'<div class="box">Todavía no llegó ningún pedido. Probá enviar uno desde PROTEGE, en "Pedir evaluación de mi zona".</div>'}
+ <h3 style="margin:22px 0 4px">Cargar resultado de laboratorio</h3><p class="lead" style="font-size:15px">Cuando llega el análisis de una muestra, se carga acá y el riesgo se recalcula. El resultado es simulado.</p>
  ${pend.length?`<form id="lf"><label for="ls">Lugar con muestra tomada</label><select id="ls">${pend.map(s=>`<option value="${esc(s.id)}">${esc(s.id)}, ${esc(s.mun)}</option>`).join('')}</select>
  <label for="lv">Mercurio en sedimento (mg/kg)</label><input id="lv" type="number" step="0.01" min="0" value="3.2" inputmode="decimal">
  <label for="lm">Método</label><select id="lm"><option>CV-AAS (vapor frío)</option><option>EPA 7473</option></select>
- <p id="lerr" style="color:var(--hi);font-weight:700" aria-live="polite"></p><div class="acts"><button type="submit">Guardar resultado</button></div></form>`:'<div class="box">No hay muestras pendientes. Primero verificá un lugar con PROTEGE.</div>'}
+ <p id="lerr" style="color:var(--hi);font-weight:700" aria-live="polite"></p><div class="acts"><button type="submit">Guardar resultado</button></div></form>`:'<div class="box">No hay muestras pendientes. Una poza verificada con PROTEGE, o un pedido con visita programada, aparece acá.</div>'}
  <div class="box" style="font-size:15px">Valor de referencia de demostración: ${CFG.refHg} mg/kg en sedimento. El valor real lo define el equipo con una norma o guía oficial.</div>`}
 
 // Cambia de sección y, en pantallas angostas, lleva la vista al contenido (queda debajo del mapa)
@@ -370,16 +380,19 @@ function render(){drawRail();drawMap();
   document.getElementById('pfoto').onchange=e=>{const f=e.target.files[0],im=document.getElementById('pimg');if(f){im.src=URL.createObjectURL(f);im.hidden=false}};
   pf.onsubmit=e=>{e.preventDefault();const val=n=>pf.querySelector(`input[name=${n}]:checked`).value;const s=site(ps.value);
    saveReport(s,{exp:val('exp')==='Sí',drena:val('drena')==='Sí',senal:[val('arena')==='Sí'&&'Arena lavada',val('color')==='Sí'&&'Agua de otro color'].filter(Boolean),nivel:val('nivel'),desc:document.getElementById('pdesc').value});
-   S.sel=s.id;save();FLASH={p:`Reporte guardado${navigator.onLine?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`};render()}}
+   S.sel=s.id;save();FLASH={p:`Reporte guardado${online()?'':' en el teléfono; se enviará cuando haya señal'}. ${s.id} pasa a esperar análisis de laboratorio.`};render()}}
  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{S.pmode=b.dataset.m;FLASH={};render()});
  bindSolicitud();
+ const ns=document.getElementById('nosig');if(ns)ns.onchange=()=>{S.sinSenal=ns.checked;save();net();if(!S.sinSenal)sync()};
+ document.querySelectorAll('[data-sol]').forEach(b=>b.onclick=()=>{const q=S.solicitudes.find(x=>x.id===b.dataset.sol);q.paso=+b.dataset.p;save();render()});
+ document.querySelectorAll('[data-ver]').forEach(b=>b.onclick=()=>{S.sel=b.dataset.ver;goView('ficha')});
  const lf=document.getElementById('lf');if(lf){lf.onsubmit=e=>{e.preventDefault();const val=parseFloat(document.getElementById('lv').value);const er=document.getElementById('lerr');
   if(!(val>=0)){er.textContent='Ingresá un valor numérico de 0 o más.';return}
-  const s=site(document.getElementById('ls').value);s.hg=val;s.estado='resultado';S.sel=s.id;save();goView('ficha')};
+  const s=site(document.getElementById('ls').value);s.hg=val;s.estado='resultado';const q=solDe(s);if(q)q.paso=5;S.sel=s.id;save();goView('ficha')};
   document.getElementById('lv').oninput=()=>{document.getElementById('lerr').textContent=''}}
  save()}
 
-const net=()=>{const n=document.getElementById('net');n.textContent=navigator.onLine?'Conectado':'Sin señal: se guarda en el teléfono';n.classList.toggle('off',!navigator.onLine)};
+const net=()=>{const n=document.getElementById('net');n.textContent=online()?'Conectado':S.sinSenal?'Sin señal (simulado): se guarda en el teléfono':'Sin señal: se guarda en el teléfono';n.classList.toggle('off',!online())};
 addEventListener('online',()=>{net();sync()});addEventListener('offline',net);net();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 render();
