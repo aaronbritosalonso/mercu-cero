@@ -5,26 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MERCU-CERO</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0d5c63">
+<meta name="theme-color" content="#f3f6f2">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <style>
 /* VOICE awareness tool for students and communities: clear, calm, serious about the facts
    IDEA a satellite field atlas of one river basin: you look down at the real forest and the scars gold mining left
    PICTURE the real Sentinel-2 image of the upper Beni, with every detected pond drawn on it; one scan sweep on load
    COLOUR river teal #0d5c63 dominant, mud-gold #c8902e for action, vermilion #d9382c only for high risk, forest #3f9a73
-   TYPE Outfit 800 titles + Atkinson Hyperlegible text
+   TYPE Manrope 800 titles + Atkinson Hyperlegible text
    LAYOUT laptop: satellite atlas as hero with title in its upper-left, panel beside it; phone: title, atlas, steps, panel, tab bar */
-:root{color-scheme:light dark;
---bg:light-dark(#f4f7f6,#071312);--card:light-dark(#ffffff,#0e1f1d);--ink:light-dark(#0a201e,#e7f1ee);--mut:light-dark(#51655f,#9fb6b0);--line:light-dark(#d9e4e1,#1e3633);
+:root{color-scheme:light;
+--bg:#f3f6f2;--card:#ffffff;--ink:#13302a;--mut:#566a64;--line:#e0e8e2;--forest:#1f5641;--forest2:#2b6c52;--sage:#e6efe8;
 --teal:#0d5c63;--teal2:#16807b;--gold:#c8902e;--gold2:#e8b75c;--hi:#d9382c;--md:#e8a317;--lo:#3f9a73}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif;overflow-x:clip}
-h1,h2{font-family:Outfit,system-ui,sans-serif;letter-spacing:-.02em;line-height:1.06;margin:0}
+h1,h2{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.02em;line-height:1.06;margin:0}
 .wrap{max-width:1320px;margin:0 auto;padding:16px max(4vw,16px) 0}
 .layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
 .atlas{position:sticky;top:12px;border-radius:22px;overflow:hidden;background:#0b2a22;color:#fff}
@@ -74,19 +74,19 @@ button.ghost,.btn.ghost{background:transparent;color:var(--ink);border:1.5px sol
 .row{display:grid;grid-template-columns:1.8em minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 8px;border-radius:12px;cursor:pointer}
 .row+.row{border-top:1px solid var(--line)}
 .row:hover,.row.sel{background:var(--bg)}
-.row .n{font-family:Outfit;font-weight:800;font-size:20px;color:var(--mut);text-align:right}
+.row .n{font-family:Manrope;font-weight:800;font-size:20px;color:var(--mut);text-align:right}
 .row small{display:block;color:var(--mut);font-size:14px}
 .chip{font-size:14px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap;color:#fff;display:inline-block}
 .c3{background:var(--hi)}.c2{background:var(--md);color:#2a1a00}.c1{background:var(--lo)}.c0{background:var(--line);color:var(--ink)}
 .tag{font-size:13px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--bg);margin-right:6px}
 .tag.ok{color:var(--lo);background:color-mix(in srgb,var(--lo) 16%,transparent)}.tag.no{color:var(--hi);background:color-mix(in srgb,var(--hi) 12%,transparent)}
-.score{font-family:Outfit;font-variant-numeric:tabular-nums;font-weight:800;font-size:21px;margin-right:8px}
-.big{font-family:Outfit;font-size:clamp(50px,6vw,64px);font-weight:800;line-height:1}
+.score{font-family:Manrope;font-variant-numeric:tabular-nums;font-weight:800;font-size:21px;margin-right:8px}
+.big{font-family:Manrope;font-size:clamp(50px,6vw,64px);font-weight:800;line-height:1}
 .box{background:var(--bg);border-radius:14px;padding:14px 16px;margin:12px 0}
 .vul{display:grid;grid-template-columns:minmax(0,1fr) 2em;gap:4px 10px;align-items:center;margin:12px 0 0}
 .vul .t{font-weight:700}.vul small{grid-column:1/-1;color:var(--mut);font-size:14px}
 .bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}.bar span{display:block;height:100%;border-radius:5px;background:var(--teal2);transition:width .6s ease}
-.vul b{grid-row:1/3;grid-column:2;font-family:Outfit;font-size:22px;text-align:right}
+.vul b{grid-row:1/3;grid-column:2;font-family:Manrope;font-size:22px;text-align:right}
 .warn{border-radius:14px;padding:12px 16px;background:color-mix(in srgb,var(--gold) 15%,transparent);font-size:15px;margin:12px 0}
 form label{display:block;font-weight:700;margin:16px 0 6px}
 input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
@@ -100,7 +100,7 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .why{max-width:1320px;margin:28px auto 0;padding:0 max(4vw,16px)}
 .why h2{font-size:clamp(26px,3vw,34px);margin-bottom:6px}
 .fact{display:grid;grid-template-columns:minmax(7.5em,auto) minmax(0,1fr);gap:20px;align-items:baseline;padding:18px 0;border-top:1px solid var(--line)}
-.fact .num{font-family:Outfit;font-weight:800;font-size:clamp(36px,4.5vw,48px);line-height:1;color:var(--teal2)}
+.fact .num{font-family:Manrope;font-weight:800;font-size:clamp(36px,4.5vw,48px);line-height:1;color:var(--teal2)}
 :root[data-theme=dark] .fact .num{color:#6fd1c6}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .fact .num{color:#6fd1c6}}
 .fact p{margin:0 0 4px;max-width:62ch}.fact a{font-size:14px;color:var(--mut)}
@@ -120,13 +120,12 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .rk .n{padding-top:1px}.rh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rh b{font-size:17px;line-height:1.3}
 .rk small{margin-top:3px}.rk .rid{font-size:13px;margin-top:5px}
 .verdict{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap}
-.vw{font-family:Outfit;font-weight:800;font-size:clamp(34px,5vw,44px);line-height:1.05}
+.vw{font-family:Manrope;font-weight:800;font-size:clamp(34px,5vw,44px);line-height:1.05}
 .c3t{color:var(--hi)}.c2t{color:light-dark(#9a6500,var(--md))}.c1t{color:light-dark(#2b7552,var(--lo))}.c0t{color:var(--mut)}
 .vp{font-weight:700;color:var(--mut)}
 .meter{position:relative;height:12px;border-radius:99px;margin:16px 0 4px;background:linear-gradient(90deg,rgb(246,228,160),rgb(236,170,40) 37%,rgb(222,92,38) 67%,rgb(160,22,18))}
 .meter .mk{position:absolute;top:-6px;width:6px;height:24px;border-radius:3px;background:var(--ink);transform:translateX(-50%);box-shadow:0 0 0 2px var(--bg)}
 .ml{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
-.why{font-size:17px;margin:18px 0 0}
 .fac{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .why+.fac{border-top:0}.fac .t{font-weight:700}.fac small{grid-column:1/-1;color:var(--mut);font-size:15px}
 .gbtn{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);color:var(--ink);border:1.5px solid var(--teal2);border-radius:18px;padding:12px 16px;min-height:64px;margin-bottom:14px;text-align:left;font-weight:400}
@@ -156,19 +155,91 @@ input,select,textarea{font:inherit;font-size:16px;width:100%;padding:12px;border
 .navb button{flex-direction:column;gap:2px;background:transparent;color:var(--mut);font-size:13px;min-height:54px;padding:0;border-radius:10px}
 .navb button[aria-pressed=true]{color:var(--ink);background:var(--bg)}}
 @media(max-width:600px){.fact{grid-template-columns:minmax(0,1fr);gap:6px}.mw{display:flex;flex-direction:column}.atlas .ttl{position:static;order:-1;max-width:none;padding:18px 16px 14px;background:#04201e}}
+/* ===== Rediseño claro (referencia del equipo en Lovable) ===== */
+body{font-size:17px}
+h1,h2,h3{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.025em}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px max(4vw,16px,calc(50vw - 660px + 4vw));background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.atlas .ttl p{margin-top:10px}
+.brand{display:flex;align-items:center;gap:10px;font-family:Manrope;font-weight:800;font-size:19px;letter-spacing:-.01em;margin-right:auto}
+.brand i{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--forest);color:#fff;font-style:normal;font-size:14px}
+.top .net{color:var(--mut)}
+.top button{min-height:40px;font-size:15px}
+.wrap{padding-top:18px}
+button,.btn{background:var(--forest);color:#fff;border-radius:14px}
+button:hover,.btn:hover{background:var(--forest2)}
+button.ghost,.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+button.ghost:hover,.btn.ghost:hover{background:var(--sage)}
+.btn.blue{color:var(--forest);border-color:color-mix(in srgb,var(--forest) 40%,transparent)}
+.panel,.how,.leer{background:var(--card);border:0;border-radius:22px;box-shadow:0 1px 2px #13302a0d,0 10px 30px -18px #1f56413d}
+.panel{padding:22px}
+.atlas{border-radius:22px;box-shadow:0 10px 30px -18px #1f564166}
+.leer{padding:16px 18px}.leer h2{font-size:17px;margin-bottom:8px}
+.leer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.leer li{display:flex;align-items:center;gap:10px}.leer li b{min-width:4.5em}.leer li span{color:var(--mut)}
+.leer i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.disc{font-size:14.5px;color:var(--mut);margin:10px 0 0}.disc b{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;padding:5px 11px;border-radius:99px}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.85}
+.c3{background:#fde3df;color:#a61f15}.c2{background:#fdf0cf;color:#7a5000}.c1{background:#e0f0e6;color:#1f6b47}.c0{background:#eef1ef;color:var(--mut)}
+.c3t{color:#b3261e}.c2t{color:#8a5a00}.c1t{color:#23704c}
+.navb{background:var(--card)}
+.navb button[aria-pressed=true]{color:var(--forest);background:var(--sage)}
+.tabs button[aria-pressed=true]{color:var(--forest);border-bottom-color:var(--forest)}
+input,select,textarea{background:var(--card)}
+.opts label:has(input:checked){border-color:var(--forest);background:var(--sage)}
+.opts input,.demo-sw input{accent-color:var(--forest)}
+.seg{background:var(--sage)}.seg button{color:var(--mut)}.seg button:hover{background:transparent}.seg button[aria-pressed=true]{background:var(--card);color:var(--forest);box-shadow:0 1px 3px #13302a1f}
+.box{background:var(--bg)}
+.warn{background:#fdf3dc}
+.how .bars span.done{background:var(--forest2)}
+/* lista de prioridades en tarjetas */
+.card.row{display:block;border:1.5px solid var(--line)}.card.row:hover{background:var(--card);border-color:color-mix(in srgb,var(--forest) 45%,transparent)}.card.row.sel{background:var(--card);border-color:var(--forest)}
+.list{display:grid;gap:12px;margin:0;padding:0;max-height:none}
+.card{border:1.5px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;background:var(--card);transition:border-color .15s}
+.card:hover{border-color:color-mix(in srgb,var(--forest) 45%,transparent)}.card.sel{border-color:var(--forest)}
+.card .rh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 12px;align-items:start}
+.card .n{font-family:Manrope;font-weight:800;font-size:22px;color:var(--mut);line-height:1.2}
+.card .rt b{display:block;font-family:Manrope;font-size:18px;line-height:1.25}
+.card .rt small{display:block;color:var(--mut);font-size:14px;margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
+.tags span{font-size:14px;padding:4px 10px;border-radius:10px;background:var(--sage);color:#2c4a41}
+.tags span.ok{background:#dcefe3;color:#1f6b47;font-weight:700}
+.card .ver{margin-top:12px;min-height:42px;font-size:15px}
+/* ficha */
+.fsub{color:var(--mut);font-size:15px;margin:2px 0 10px}
+.fst{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 4px}.fst small{color:var(--mut);font-size:14.5px}
+.porq{font-size:18px;margin:20px 0 8px}
+.reasons{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.reasons li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.reasons svg{width:30px;height:30px;padding:6px;border-radius:9px;background:var(--sage);color:var(--forest)}
+.accion{margin:18px 0 0;border-radius:16px;padding:14px 16px;background:var(--sage);border-left:5px solid var(--forest)}
+.accion h3{font-size:13.5px;letter-spacing:.02em;color:var(--forest);margin:0 0 4px}.accion p{margin:0;font-weight:700}
+.accion.a3{background:#fde9e6;border-color:#c62a1e}.accion.a3 h3{color:#a61f15}
+.accion.a2{background:#fdf3dc;border-color:#c8902e}.accion.a2 h3{color:#7a5000}
+details.tech{margin:16px 0 0;border:1.5px solid var(--line);border-radius:16px;padding:0 16px}
+details.tech summary{cursor:pointer;font-weight:700;min-height:48px;display:flex;align-items:center}
+details.tech[open]{padding-bottom:14px}
+.fac:first-of-type{border-top:0}
+@media(max-width:600px){.atlas .ttl{background:var(--bg);color:var(--ink);padding:4px 2px 14px}.atlas .ttl p{color:var(--mut)}.atlas{border-radius:18px}.atlas .mw{background:var(--bg)}
+ .top .net{display:none}.panel{padding:18px 16px}}
 </style>
 </head>
 <body>
+<header class="top"><span class="brand"><i aria-hidden="true">Hg</i>MERCU-CERO</span><span class="net" id="net">Conectado</span><button type="button" class="ghost" id="gopen">¿Cómo se usa?</button></header>
 <div class="wrap">
  <div class="layout">
   <figure class="atlas" style="margin:0">
    <div class="mw"><svg id="map" role="img" aria-label="Imagen satelital de la cuenca alta del río Beni con las pozas detectadas"></svg>
-   <div class="ttl"><h1>MERCU-CERO</h1><p>Dónde están los relaves mineros que pueden llevar mercurio a los ríos del norte de La Paz, y cuáles atender primero.</p></div></div>
-   <figcaption class="foot"><span><span class="net" id="net">Conectado</span> · Imagen Sentinel-2 de may a sep de 2025 (Copernicus)</span>
+   <div class="ttl"><h1>Dónde investigar primero</h1><p>Imágenes satelitales, datos del territorio y la voz de la comunidad para encontrar relaves mineros que pueden llevar mercurio a los ríos del norte de La Paz.</p></div></div>
+   <figcaption class="foot"><span>Imagen Sentinel-2 de may a sep de 2025 (Copernicus)</span>
     <span class="legend"><span class="grad">Menos riesgo <b></b> Más riesgo</span><span><i class="ring"></i>Confirmada en imagen</span><span>Tamaño = área</span><span>◆ Pedido de la comunidad</span></span></figcaption>
   </figure>
   <div class="side">
-   <button type="button" class="gbtn" id="gopen"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#0d5c63"/><path d="M16 13.5v13l10.5-6.5z" fill="#fff"/></svg><span><b>¿Primera vez? Mirá cómo se usa</b><span>Cinco pasos cortos, menos de un minuto.</span></span></button>
+   <section class="leer" aria-labelledby="leert"><h2 id="leert">Cómo leer el nivel de riesgo</h2><ul>
+    <li><i style="background:#3f9a73"></i><b>Bajo</b><span>Seguimiento con satélite</span></li>
+    <li><i style="background:#e0a21a"></i><b>Medio</b><span>Evaluar una visita</span></li>
+    <li><i style="background:#c62a1e"></i><b>Alto</b><span>Inspección prioritaria</span></li></ul>
+    <p class="disc">El nivel de riesgo indica <b>prioridad de investigación</b>. No confirma que haya mercurio: eso solo lo dice un análisis de laboratorio.</p></section>
    <section class="how" aria-label="Cómo funciona">
     <div class="head"><div><h2 id="howt">Seguí un caso real de principio a fin</h2><p class="now" id="hown">Seis pasos: del satélite a la decisión.</p></div><button id="go">Empezar</button></div>
     <div class="bars" id="rail" aria-hidden="true"></div>
@@ -250,6 +321,18 @@ const ICON={
  protege:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>',
  lab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg>'};
 const TABS=[['ranking','Prioridades'],['ficha','Sitio'],['protege','PROTEGE'],['lab','Autoridad']];
+const titulo=s=>s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`;
+function tagsDe(s){const v=VIS[s.id],t=[];if(v&&v[0]!=='falso')t.push(`<span class="${v[0]==='confirmada'?'ok':''}">${VISL[v[0]]}</span>`);if(s.comunidad)t.push('<span>Pedido de la comunidad</span>');
+ t.push(`<span>${s.comunidad?'A '+(s.distRio/1000).toFixed(1).replace('.',',')+' km del río':rioTxt(s).replace(/^./,c=>c.toUpperCase())}</span>`);if(s.pob)t.push(`<span>${s.pob.toLocaleString('es-BO')} personas a 5 km</span>`);
+ if(s.apKm===0)t.push('<span>Dentro de área protegida</span>');else if(s.apKm<=CFG.apKm)t.push('<span>Junto a área protegida</span>');return t.join('')}
+const ICO={rio:'<path d="M3 15c3 0 3-2 6-2s3 2 6 2 3-2 6-2M3 9c3 0 3-2 6-2s3 2 6 2 3-2 6-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+ img:'<rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2"/>',
+ gente:'<circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M16 11a3 3 0 1 0 0-6M18 20c0-2.5-1-4.3-2.6-5.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+ hoja:'<path d="M5 19C5 9 11 4 20 4c0 9-5 15-15 15zM5 19l8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+ casa:'<path d="M4 11l8-7 8 7v9H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
+function accion(s,r){if(!r.pre)return typeof s.hg==='number'&&s.hg>CFG.refHg?[3,'El análisis supera la referencia: coordinar la remediación y avisar a la comunidad.']:[1,'El análisis está bajo la referencia: mantener el seguimiento con satélite.'];
+ return r.n===3?[3,'Inspección prioritaria: programar visita de campo y toma de muestras para análisis de mercurio.']:r.n===2?[2,s.estado==='candidato'?'Evaluar una visita: confirmar en el lugar con PROTEGE y, si se confirma, tomar muestras.':'Evaluar una visita y tomar muestras para análisis de mercurio.']:[1,'Seguimiento con satélite: revisar la zona con imágenes nuevas cada temporada seca.']}
 const rioTxt=s=>s.distRio<=60?'pegada al río':s.distRio<1000?`a ${s.distRio} m del río`:`a ${(s.distRio/1000).toFixed(1).replace('.',',')} km del río`;
 const nivel=r=>r.p<0?'Sin datos':'Riesgo '+['','bajo','medio','alto'][r.n];
 const PLAIN={a:'Riesgo para la salud',b:'Vulnerabilidad de la comunidad',c:'Naturaleza cercana'};
@@ -289,22 +372,28 @@ function drawRail(){const cur=S.step-1;
 const visTag=id=>{const v=(VIS[id]||[])[0];if(!v)return'';return `<span class="tag ${v==='confirmada'?'ok':v==='falso'?'no':''}">${esc(VISL[v])}</span>`};
 
 function vRanking(){const r=rank();return `<h2>¿Dónde actuar primero?</h2><p class="lead">${S.sites.filter(s=>!s.comunidad).length} posibles pozas de relave detectadas por satélite${(c=>c?` y ${c} ${c===1?'pedido':'pedidos'} de la comunidad`:'')(S.sites.filter(s=>s.comunidad).length)}, de mayor a menor riesgo. Tocá uno para ver por qué.</p><div class="list">`+
- r.map((x,i)=>{const s=x.s;return `<div class="row rk${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><span class="n">${i+1}</span><span><span class="rh"><b>${s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`}</b><span class="chip c${x.r.n}">${nivel(x.r)}</span></span><small>${s.comunidad?`Lo pidió la comunidad, ${rioTxt(s)}`:`${s.pob.toLocaleString('es-BO')} personas viven cerca, ${rioTxt(s)}`}</small><small class="rid">${visTag(s.id)}${x.r.pre?'Sin confirmar con laboratorio':'Confirmado con laboratorio'} · código ${esc(s.id)}</small></span></div>`}).join('')+'</div>'}
+ r.map((x,i)=>{const s=x.s;return `<article class="card row${s.id===S.sel?' sel':''}" data-id="${esc(s.id)}"><div class="rh"><span class="n">${i+1}</span><span class="rt"><b>${titulo(s)}</b><small>${esc(s.id)} · ${esc(s.mun)} · ${x.r.pre?'preliminar':'con laboratorio'}</small></span><span class="chip c${x.r.n}">${nivel(x.r)}</span></div><div class="tags">${tagsDe(s)}</div><button type="button" class="ghost ver" tabindex="-1">Ver por qué</button></article>`}).join('')+'</div>'}
 
 function vFicha(){const s=site(S.sel),r=idx(s),pos=rank().findIndex(x=>x.s.id===s.id)+1,v=VIS[s.id];
  const bar=(t,val,m)=>`<div class="fac"><span class="t">${t}</span><span class="chip c${val||0}">${['Sin dato','Bajo','Medio','Alto'][val||0]}</span><small>${esc(m)}</small></div>`;
  const miss=[typeof s.hg!=='number'&&'análisis de laboratorio',s.estado==='candidato'&&'verificación en el lugar',s.estado==='solicitud'&&'visita técnica'].filter(Boolean);
- return `<h2>${s.comunidad?`Pedido en ${esc(s.lugar||s.mun)}`:`Poza en ${esc(s.mun)}`}</h2><p class="lead">${s.comunidad?`La comunidad pidió evaluar este lugar de ${esc(s.mun)}. Está a unos ${s.distRio.toLocaleString('es-BO')} m del río grande más cercano (aproximado).`:`Posible poza de relave minero de ${String(s.ha).replace('.',',')} hectáreas, ${rioTxt(s)}. Unas ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km.`} <span style="font-size:14px">Código ${esc(s.id)}.</span></p>
- <div class="box"><div class="verdict"><span class="vw c${r.n}t">${nivel(r)}</span><span class="vp">Prioridad ${pos} de ${S.sites.length}</span></div>
- ${r.p<0?'':`<div class="meter" role="img" aria-label="Puntaje ${fmt(r.p)} en una escala de 1 a 3"><span class="mk" style="left:${Math.max(0,Math.min(100,(r.p-1)/2*100))}%"></span></div><div class="ml"><span>Bajo</span><span>Medio</span><span>Alto</span></div>`}
- <small style="color:var(--mut);display:block;margin-top:8px">${r.pre?'Es una sospecha: falta confirmarlo con laboratorio.':'Confirmado con análisis de laboratorio.'} Puntaje ${fmt(r.p)} de 3.</small>
- <h3 class="why">¿Por qué?</h3>
- ${bar(PLAIN.a,r.a[0],r.a[2])}${bar(PLAIN.b,r.b[0],r.b[1])}${bar(PLAIN.c,r.c[0],r.c[1])}</div>
- ${s.comunidad?solBox(s):''}${v?`<div class="box"><b>Mirada en imagen de alta resolución:</b> ${visTag(s.id)}${esc(v[1])}</div>`:''}
+ const ac=accion(s,r),rs=[[ 'rio',s.comunidad?`A unos ${s.distRio.toLocaleString('es-BO')} m del río grande más cercano (aproximado)`:`${rioTxt(s).replace(/^./,c=>c.toUpperCase())} (${s.distRio} m)`]];
+ if(v&&v[0]!=='falso')rs.push(['img',`${VISL[v[0]]}: ${v[1]}`]);
+ if(!/ a unos \d/.test(r.a[2]))rs.push(['salud',r.a[2]]);rs.push(['casa',r.b[1]]);if(s.pob)rs.push(['gente',`Unas ${s.pob.toLocaleString('es-BO')} personas viven a menos de 5 km`]);rs.push(['hoja',r.c[1]]);
+ return `<h2>${titulo(s)}</h2><p class="fsub">${esc(s.id)} · Prioridad ${pos} de ${S.sites.length}${s.comunidad?'':` · ${String(s.ha).replace('.',',')} hectáreas`}</p>
+ <div class="fst"><span class="chip c${r.n}">${nivel(r)}</span><small>${r.pre?'Preliminar: sin análisis de laboratorio':'Confirmado con análisis de laboratorio'}</small></div>
+ <h3 class="porq">¿Por qué es prioritario?</h3>
+ <ul class="reasons">${rs.map(([k,t])=>`<li>${ico(k==='salud'?'gente':k)}<span>${esc(t)}</span></li>`).join('')}</ul>
+ <div class="accion a${ac[0]}"><h3>Acción recomendada</h3><p>${esc(ac[1])}</p></div>
+ <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'?'<button id="toL">Cargar laboratorio</button>':s.estado==='solicitud'?'<button id="toL">Ver en el panel de la autoridad</button>':''}<a class="btn ghost" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>
+ ${s.comunidad?solBox(s):''}
  ${r.pre?`<div class="warn"><b>Todavía es una sospecha.</b> ${s.comunidad?'La comunidad avisó de un posible problema.':'El satélite no ve el mercurio: muestra lugares que parecen relaves.'} Solo un análisis de laboratorio confirma si hay mercurio.</div>`:''}
  ${typeof s.hg==='number'?`<div class="box">Laboratorio (simulado): <b>${String(s.hg).replace('.',',')} mg/kg</b> de mercurio en sedimento. Referencia de demostración: ${CFG.refHg} mg/kg.</div>`:''}
  ${miss.length?`<p class="lead">Falta: ${miss.map(esc).join(' y ')}.</p>`:''}
- <div class="acts">${s.estado==='candidato'?'<button id="toP">Verificar en el lugar</button>':''}${s.estado==='pendiente'?'<button id="toL">Cargar laboratorio</button>':s.estado==='solicitud'?'<button id="toL">Ver en el panel de la autoridad</button>':''}<a class="btn blue" href="https://www.google.com/maps/@${s.lat},${s.lon},900m/data=!3m1!1e3" target="_blank" rel="noopener">Ver en Google Maps</a><button class="ghost" id="copy">Copiar ficha</button></div><p id="cmsg" class="msg" aria-live="polite"></p>`}
+ <details class="tech"><summary>Detalles técnicos del índice</summary>
+ ${r.p<0?'':`<div class="meter" role="img" aria-label="Puntaje ${fmt(r.p)} en una escala de 1 a 3"><span class="mk" style="left:${Math.max(0,Math.min(100,(r.p-1)/2*100))}%"></span></div><div class="ml"><span>Bajo</span><span>Medio</span><span>Alto</span></div>`}
+ ${bar(PLAIN.a,r.a[0],r.a[2])}${bar(PLAIN.b,r.b[0],r.b[1])}${bar(PLAIN.c,r.c[0],r.c[1])}
+ <p class="lead" style="font-size:14.5px;margin:10px 0 0">Puntaje ${fmt(r.p)} de 3 = 0,5 × salud + 0,2 × comunidad + 0,3 × naturaleza, redondeado al nivel más cercano (guía CEPAL 2024 para pasivos mineros).</p></details>`}
 
 function vReporte(){const opts=S.sites.filter(s=>s.estado==='candidato').map(s=>`<option value="${esc(s.id)}"${s.id===S.sel?' selected':''}>${esc(s.id)}, ${esc(s.mun)}, ${String(s.ha).replace('.',',')} ha</option>`).join('');
  const yn=(n,q)=>`<label>${q}</label><div class="opts">${['Sí','No','No sé'].map(v=>`<label><input type="radio" name="${n}" value="${v}" ${v==='No sé'?'checked':''}>${v}</label>`).join('')}</div>`;
